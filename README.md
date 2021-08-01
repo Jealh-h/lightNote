@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # lightnote
 
 A new Flutter project.
@@ -15,7 +14,7 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
-=======
+
 # lightNote
-一个flutter的大作业项目，写的是一个笔记app。
->>>>>>> 6f228f414e93c1fbba33251f6ce5b85d46ae010d
+
+一个 flutter 的大作业项目，写的是一个笔记 app。

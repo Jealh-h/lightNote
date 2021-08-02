@@ -19,10 +19,12 @@ class LoginScreen extends StatelessWidget {
           children: <Widget>[
             Positioned(
               left: 0,
-              top: 0,
+              top: 10,
               child: Image.asset(
-                'assets/images/bg.png',
-                width: size.width,
+                'assets/images/index.png',
+                // fit: BoxFit.cover,
+                height: size.height,
+                // width: size.width,
               ),
             ),
             SingleChildScrollView(

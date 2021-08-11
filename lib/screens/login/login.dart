@@ -4,7 +4,9 @@ import 'package:lightnote/components/input_container.dart';
 import 'package:lightnote/components/primary_button.dart';
 import 'package:lightnote/components/tail_input_container.dart';
 import 'package:lightnote/constant.dart';
+import 'package:lightnote/screens/Signup/signup.dart';
 import 'package:lightnote/screens/forgetPassword/ForgetPassWord.dart';
+import 'package:lightnote/screens/index/index.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
@@ -45,8 +47,11 @@ class LoginScreen extends StatelessWidget {
                     margin: EdgeInsets.symmetric(vertical: 20, horizontal: 35),
                     child: PrimaryButton(
                       color: IconColor,
-                      text: "login",
-                      press: () {},
+                      text: "登 录",
+                      press: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Index()));
+                      },
                     ),
                   ),
                   // 没有账号,忘记密码
@@ -76,7 +81,14 @@ class LoginScreen extends StatelessWidget {
                             "注册",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SignUp(),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),

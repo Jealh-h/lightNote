@@ -12,7 +12,6 @@ class TailInputContainer extends StatelessWidget {
     this.suffixIcon = Icons.visibility,
     required this.onChanged,
   });
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

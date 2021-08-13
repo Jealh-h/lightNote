@@ -29,6 +29,8 @@ dependencies:
   flutter_weather_bg_null_safety: ^1.0.0
   amap_flutter_location: ^2.0.0
   http: ^0.13.3
+  provider: ^5.0.0
+  fl_chart: ^0.36.3
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -66,6 +68,13 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+    - family: BaoTuXiaoBai
+      fonts:
+        - asset: assets/fonts/包图小白体.ttf
+    - family: TangYuan
+      fonts:
+        - asset: assets/fonts/猫啃网糖圆体(测试版).ttf
   # fonts:
   #   - family: Schyler
   #     fonts:

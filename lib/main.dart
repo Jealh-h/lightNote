@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lightnote/screens/login/login.dart';
+import 'package:lightnote/screens/note/noteScreen.dart';
 
 import 'components/primary_button.dart';
 import 'constant.dart';
@@ -13,6 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      routes: {"/note": (context) => NoteScreen()},
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(primaryColor: Colors.indigo[50]),

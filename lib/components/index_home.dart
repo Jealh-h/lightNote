@@ -2,15 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:lightnote/constants/const.dart';
-import 'package:lightnote/screens/amap_location/amap.dart';
-import 'package:lightnote/screens/profille/profile.dart';
+import 'package:lightnote/screens/bill/bill.dart';
+import 'package:lightnote/screens/note/noteScreen.dart';
 import 'package:lightnote/utils/http.dart';
-import 'package:lightnote/utils/utils.dart';
-import 'dart:ui';
+// import 'dart:ui';
 
 import 'package:flutter_weather_bg_null_safety/bg/weather_bg.dart';
-import 'package:flutter_weather_bg_null_safety/utils/print_utils.dart';
-import 'package:flutter_weather_bg_null_safety/utils/weather_type.dart';
 
 class IndexHome extends StatefulWidget {
   TextStyle dateTextStyle = TextStyle(
@@ -57,6 +54,7 @@ class IndexStateScreen extends State<IndexHome> {
   };
   @override
   void initState() {
+    print("initstate");
     getWeather();
     setTimer();
     setState(() {
@@ -67,6 +65,12 @@ class IndexStateScreen extends State<IndexHome> {
   @override
   void dispose() {
     super.dispose();
+    clearTimer();
+    print("dispose");
+  }
+
+  // 清除定时器
+  clearTimer() {
     if (_timer != null) {
       _timer?.cancel();
       _timer = null;
@@ -86,7 +90,6 @@ class IndexStateScreen extends State<IndexHome> {
     var month = DateTime.now().month;
     var day = DateTime.now().day;
     var week = weekdays[DateTime.now().weekday % 7];
-    print(DateTime.now());
     setState(() {
       if (minute < 10)
         _time = "${hour}:0${minute}";
@@ -115,7 +118,11 @@ class IndexStateScreen extends State<IndexHome> {
       alignment: Alignment.topLeft,
       duration: Duration(milliseconds: 250),
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(radius)),
+          gradient: LinearGradient(
+              colors: [Color(0xff23334C), Color(0xff171F2B)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter),
+          borderRadius: BorderRadius.circular(radius)),
       child: Column(
         children: [
           SizedBox(
@@ -134,16 +141,12 @@ class IndexStateScreen extends State<IndexHome> {
                       isDrawerOpen = !isDrawerOpen;
                     });
                   },
-                  icon: Icon(Icons.menu))
+                  icon: Image.asset(
+                    "assets/icons/menu_light.png",
+                    height: 36,
+                    width: 36,
+                  ))
             ],
-          ),
-          TextButton(
-            onPressed: () {
-              gaodeGetLocation();
-              // Navigator.push(
-              //     context, MaterialPageRoute(builder: (context) => AmapApp()));
-            },
-            child: Text("获取天气"),
           ),
           // 天气、日期卡片
           Card(
@@ -182,7 +185,18 @@ class IndexStateScreen extends State<IndexHome> {
                         Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Text("你好！jealh", style: widget.dateTextStyle),
+                            Text.rich(
+                              TextSpan(children: [
+                                TextSpan(
+                                    text: "Hello，",
+                                    style: widget.dateTextStyle),
+                                TextSpan(
+                                  text: "Jealh",
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.black),
+                                ),
+                              ]),
+                            ),
                             Text(
                               _time,
                               style: widget.dateTextStyle,
@@ -251,10 +265,38 @@ class IndexStateScreen extends State<IndexHome> {
           // body部分
           Expanded(
             child: SingleChildScrollView(
+              // 功能区
               child: Column(
                 children: [
-                  // 功能区
-                  _buildFunItem("记笔记", size),
+                  Container(
+                    height: size.height * 0.5,
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: GridView.count(
+                      crossAxisCount: 2,
+                      children: [
+                        _buildFunItem(
+                            "记笔记", "assets/icons/Notebook.png", colorsArr[0],
+                            () {
+                          // dispose();
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => NoteScreen(),
+                            ),
+                          );
+                        }),
+                        _buildFunItem(
+                            "记账单", "assets/icons/bill.png", colorsArr[1], () {
+                          Navigator.pop(context);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BillScreen()));
+                        }),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -264,43 +306,44 @@ class IndexStateScreen extends State<IndexHome> {
     );
   }
 
-  Widget _buildFunItem(String name, Size size) {
-    return Container(
-      height: size.height * 0.5,
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: GridView.count(crossAxisCount: 2, children: [
-        Container(
-          margin: EdgeInsets.all(5),
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-                colors: [Colors.purple.shade50, Colors.pink.shade50]),
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 10,
-                // spreadRadius: 5,
-                color: Colors.black45.withAlpha(30),
-                offset: Offset(0, 5),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                "assets/icons/Notebook.png",
-                width: 64,
-                height: 64,
-              ),
-              Text(
-                "记笔记",
-                style: TextStyle(fontSize: 16, color: Colors.black),
-              )
-            ],
-          ),
+  Widget _buildFunItem(
+      String name, String imgSrc, List<Color> colorList, Function tapFun) {
+    return GestureDetector(
+      onTap: () {
+        tapFun();
+      },
+      child: Container(
+        margin: EdgeInsets.all(5),
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+              colors: colorList,
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 10,
+              color: Colors.black45.withAlpha(30),
+              offset: Offset(0, 5),
+            ),
+          ],
         ),
-      ]),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              imgSrc,
+              width: 48,
+              height: 48,
+            ),
+            Text(
+              name,
+              style: TextStyle(fontSize: 16, color: Colors.black),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

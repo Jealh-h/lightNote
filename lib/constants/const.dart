@@ -1,5 +1,6 @@
-import 'package:flutter_weather_bg_null_safety/bg/weather_bg.dart';
-import 'package:flutter_weather_bg_null_safety/utils/print_utils.dart';
+import 'dart:ffi';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_weather_bg_null_safety/utils/weather_type.dart';
 
 Map<String, WeatherType> weatherBgMap = {
@@ -79,4 +80,22 @@ const weekdays = [
   "星期四",
   "星期五",
   "星期六",
+];
+
+var colorsArr = [
+  [Colors.blue.shade200, Colors.blue.shade300],
+  [Colors.green.shade200, Colors.green.shade300],
+  [Colors.purple.shade200, Colors.purple.shade300],
+  [Colors.grey.shade300, Colors.grey.shade400],
+  [Colors.blue.shade800, Colors.blue.shade900]
+];
+
+var noteBookCover = [
+  "assets/images/notebook_cover1.png",
+  "assets/images/notebook_cover2.png",
+  "assets/images/notebook_cover3.png",
+  "assets/images/notebook_cover4.png",
+  "assets/images/notebook_cover5.png",
+  "assets/images/notebook_cover6.png",
+  "assets/images/notebook_cover7.png",
 ];

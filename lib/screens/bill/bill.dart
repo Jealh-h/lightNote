@@ -74,8 +74,6 @@ class BillScreenState extends State<BillScreen> with TickerProviderStateMixin {
         children: <Widget>[
           Center(
             child: Container(
-              height: 200,
-              width: 200,
               child: BarChartScreen(),
             ),
           ),

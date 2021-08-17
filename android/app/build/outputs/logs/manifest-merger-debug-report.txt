@@ -5,6 +5,7 @@ INJECTED from D:\MyFrontEndFile\flutter\lightNote\lightnote\android\app\src\main
 INJECTED from D:\MyFrontEndFile\flutter\lightNote\lightnote\android\app\src\main\AndroidManifest.xml:1:1-49:12
 INJECTED from D:\MyFrontEndFile\flutter\lightNote\lightnote\android\app\src\main\AndroidManifest.xml:1:1-49:12
 MERGED from D:\MyFrontEndFile\flutter\lightNote\lightnote\android\app\src\main\AndroidManifest.xml:1:1-49:12
+MERGED from [:fluttertoast] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\fluttertoast\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:amap_flutter_location] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\amap_flutter_location\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:location] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\location\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-18:12
 MERGED from [:permission_handler] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\permission_handler\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
@@ -194,6 +195,8 @@ uses-sdk
 INJECTED from D:\MyFrontEndFile\flutter\lightNote\lightnote\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from D:\MyFrontEndFile\flutter\lightNote\lightnote\android\app\src\main\AndroidManifest.xml
 INJECTED from D:\MyFrontEndFile\flutter\lightNote\lightnote\android\app\src\main\AndroidManifest.xml
+MERGED from [:fluttertoast] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\fluttertoast\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:fluttertoast] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\fluttertoast\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:amap_flutter_location] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\amap_flutter_location\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:amap_flutter_location] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\amap_flutter_location\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:location] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\location\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44

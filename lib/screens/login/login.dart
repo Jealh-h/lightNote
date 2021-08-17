@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lightnote/components/input_container.dart';
 import 'package:lightnote/components/primary_button.dart';
 import 'package:lightnote/components/tail_input_container.dart';
@@ -7,8 +7,11 @@ import 'package:lightnote/constant.dart';
 import 'package:lightnote/screens/Signup/signup.dart';
 import 'package:lightnote/screens/forgetPassword/ForgetPassWord.dart';
 import 'package:lightnote/screens/index/index.dart';
+import 'package:lightnote/utils/http.dart';
 
 class LoginScreen extends StatelessWidget {
+  final TextEditingController username = TextEditingController();
+  final TextEditingController password = TextEditingController();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -36,10 +39,12 @@ class LoginScreen extends StatelessWidget {
                     height: size.height * 0.2,
                   ),
                   InputContainer(
+                    controller: username,
                     hintText: "请输入账户名",
                     onChanged: (string) {},
                   ),
                   TailInputContainer(
+                    controller: password,
                     hintText: "请输入账户密码",
                     onChanged: (string) {},
                   ),
@@ -48,9 +53,25 @@ class LoginScreen extends StatelessWidget {
                     child: PrimaryButton(
                       color: IconColor,
                       text: "登 录",
-                      press: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Index()));
+                      press: () async {
+                        // httpGet("10.0.2.2:7001", "/");
+                        var result = await httpPost(param: {
+                          "username": "${username.text}",
+                          "password": "${password.text}"
+                        }, uri: "http://10.0.2.2:7001/api/signin");
+                        if (result["status"] == 'success') {
+                          // 提示登录成功
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => Index()));
+                        } else {
+                          // 提示错误信息
+                          // Fluttertoast.showToast(
+                          //   gravity: ToastGravity.CENTER,
+                          //   backgroundColor: Colors.amber[900],
+                          //   msg: result['data'],
+                          // );
+                          showToast();
+                        }
                       },
                     ),
                   ),
@@ -148,5 +169,9 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void showToast() {
+    Fluttertoast.showToast(gravity: ToastGravity.CENTER, msg: "123");
   }
 }

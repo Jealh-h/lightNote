@@ -5,7 +5,9 @@ class InputContainer extends StatelessWidget {
   final String hintText;
   final IconData icon;
   final ValueChanged<String> onChanged;
+  final TextEditingController controller;
   const InputContainer({
+    required this.controller,
     required this.hintText,
     this.icon = Icons.person,
     required this.onChanged,
@@ -23,6 +25,7 @@ class InputContainer extends StatelessWidget {
         borderRadius: BorderRadius.circular(25),
       ),
       child: TextField(
+        controller: controller,
         onChanged: onChanged,
         decoration: InputDecoration(
             hintText: hintText,

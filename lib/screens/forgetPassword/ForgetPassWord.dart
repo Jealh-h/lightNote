@@ -11,7 +11,27 @@ class ForgetPassWord extends StatefulWidget {
 }
 
 class ForgetPassWordState extends State<ForgetPassWord> {
-  final int currentStep = 0;
+  int currentStep = 1;
+  List<Widget> panels = [];
+  final TextEditingController mailController = TextEditingController();
+  final TextEditingController passController = TextEditingController();
+  final TextEditingController confirmController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      panels = [
+        buildVerifyEmail(),
+        buildModifyPassWord(),
+        RetrieveResult(),
+      ];
+      setState(() {
+        panels;
+        currentStep = 1;
+      });
+    });
+  }
 
   // 构建指示器
   Widget buildIndicator(String text, int index) {
@@ -22,7 +42,8 @@ class ForgetPassWordState extends State<ForgetPassWord> {
           height: 32,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: Colors.amber[900],
+            color:
+                currentStep == index ? Colors.amber[900] : Colors.grey.shade400,
             borderRadius: BorderRadius.circular(32),
           ),
           child: Text(
@@ -42,6 +63,7 @@ class ForgetPassWordState extends State<ForgetPassWord> {
       children: [
         // 邮箱输入框
         InputContainer(
+          controller: mailController,
           icon: Icons.email,
           hintText: "请输入邮箱地址",
           onChanged: (string) {},
@@ -95,11 +117,13 @@ class ForgetPassWordState extends State<ForgetPassWord> {
     return Column(
       children: [
         InputContainer(
+          controller: passController,
           icon: Icons.vpn_key,
           hintText: "请输入新密码",
           onChanged: (string) {},
         ),
         InputContainer(
+          controller: confirmController,
           icon: Icons.vpn_key,
           hintText: "请确认新密码",
           onChanged: (string) {},
@@ -167,17 +191,23 @@ class ForgetPassWordState extends State<ForgetPassWord> {
               SizedBox(
                 height: size.height * 0.15,
               ),
-              // buildVerifyEmail(),
-              // buildModifyPassWord(),
-              RetrieveResult(),
+
+              // 当前步骤页面
+              panels.length == 0 ? Text("loading") : panels[currentStep - 1],
               // 下一步
               Container(
                 margin: EdgeInsets.symmetric(vertical: 20),
                 width: size.width * 0.8,
                 child: PrimaryButton(
                   color: Colors.amber[900],
-                  text: "下一步",
-                  press: () {},
+                  text: currentStep == 3 ? "完成" : "下一步",
+                  press: () {
+                    if (currentStep < 3) {
+                      setState(() {
+                        currentStep++;
+                      });
+                    }
+                  },
                 ),
               ),
             ],

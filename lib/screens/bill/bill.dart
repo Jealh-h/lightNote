@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:lightnote/components/charts/bar_charts.dart';
 import 'package:lightnote/components/circle_button.dart';
+import 'package:lightnote/screens/bill/bill_index.dart';
 import 'package:lightnote/screens/index/index.dart';
 
 class BillScreen extends StatefulWidget {
@@ -72,14 +73,10 @@ class BillScreenState extends State<BillScreen> with TickerProviderStateMixin {
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
+          BillIndex(),
           Center(
-            child: Container(
-              child: BarChartScreen(),
-            ),
-          ),
-          Center(
-            child: Text("It's rainy here"),
-          ),
+            child: BarChartScreen(),
+          )
         ],
       ),
     );

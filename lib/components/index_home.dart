@@ -79,7 +79,7 @@ class IndexStateScreen extends State<IndexHome> {
 
 // 获取天气
   getWeather() async {
-    weatherInfo = await httpGet('restapi.amap.com', '/v3/weather/weatherInfo',
+    weatherInfo = await httpsGet('restapi.amap.com', '/v3/weather/weatherInfo',
         {"key": "25d3dafaaf101d84a39d5670e2d74d2f", "city": "110101"});
   }
 

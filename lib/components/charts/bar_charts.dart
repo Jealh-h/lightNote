@@ -1,219 +1,340 @@
+import 'dart:async';
 import 'dart:math';
-
+import 'package:flutter/gestures.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class BarChartScreen extends StatefulWidget {
+  final List<Color> availableColors = [
+    Colors.purpleAccent,
+    Colors.yellow,
+    Colors.lightBlue,
+    Colors.orange,
+    Colors.pink,
+    Colors.redAccent,
+  ];
+
   @override
-  State<StatefulWidget> createState() {
-    return BarChartState();
-  }
+  State<StatefulWidget> createState() => BarChartScreenState();
 }
 
-class BarChartState extends State<BarChartScreen> {
-  late List data = [];
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    var rand = Random();
-    for (int i = 0; i < 5; i++) {
-      data.add({"yAxis": rand.nextDouble() * 10, "xAxis": i});
-    }
-  }
+class BarChartScreenState extends State<BarChartScreen> {
+  final Color barBackgroundColor = const Color(0xff72d8bf);
+  final Duration animDuration = const Duration(milliseconds: 250);
+
+  int touchedIndex = -1;
+
+  bool isPlaying = false;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 300,
-      child: BarChart(
-          BarChartData(
-            // 设置为center对齐，才能使groupsSpace生效
-            alignment: BarChartAlignment.center,
-            maxY: 10,
-            // barGroups之间距离
-            groupsSpace: 16,
-            barGroups: data.map((e) {
-              return BarChartGroupData(
-                x: e["xAxis"],
-                // 一个组内，各个barRod之间的间距
-                barsSpace: 3,
-                // 在BarChartRodData头上显示tooltip，
-                // 数组放一个组内rodData的下标，表示要在一个组内哪一个柱状图上显示
-                showingTooltipIndicators: [0],
-                barRods: [
-                  BarChartRodData(
-                    y: e["yAxis"],
-                    width: 15,
-                    // 设置多组颜色会形成渐变
-                    colors: [Color(0xff43CAF2), Color(0xff64F0AC)],
-                    gradientColorStops: [],
-                    gradientFrom: Offset(0, 1),
-                    gradientTo: Offset(0, 0),
-                    // borderRadius: BorderRadius.circular(20),
-
-                    // 让bar的空余部分显示,并设置其显示背景色
-                    backDrawRodData: BackgroundBarChartRodData(
-                      y: 10,
-                      show: false,
-                      colors: [Colors.amber],
-                    ),
-                    // 用于在一个柱状图上绘制多段颜色，需要把colors属性注释掉
-                    rodStackItems: [
-                      BarChartRodStackItem(0, 3, Colors.red),
-                      BarChartRodStackItem(3, 6, Colors.green),
-                      BarChartRodStackItem(6, 9, Colors.blue),
-                    ],
+    return AspectRatio(
+      aspectRatio: 1,
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+        color: const Color(0xff81e5cd),
+        child: Stack(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Text(
+                    'Mingguan',
+                    style: TextStyle(
+                        color: const Color(0xff0f4a3c),
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold),
                   ),
-                  BarChartRodData(
-                    y: 9,
-                    width: 15,
-                    // colors: [Color(0xff43CAF2), Color(0xff64F0AC)],
-                    // gradientColorStops: [e["yAxis"]],
-                    // gradientFrom: Offset(e["xAxis"].toDouble(), 1),
-                    // gradientTo: Offset(e["xAxis"].toDouble(), 1),
-                    // borderRadius: BorderRadius.circular(20),
-
-                    // 让bar的空余部分显示背景色
-                    backDrawRodData: BackgroundBarChartRodData(
-                      y: 10,
-                      show: false,
-                      colors: [Colors.amber],
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    'Grafik konsumsi kalori',
+                    style: TextStyle(
+                        color: const Color(0xff379982),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    height: 38,
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: BarChart(
+                        isPlaying ? randomData() : mainBarData(),
+                        swapAnimationDuration: animDuration,
+                      ),
                     ),
-                    rodStackItems: [
-                      BarChartRodStackItem(0, 3, Colors.red),
-                      BarChartRodStackItem(3, 6, Colors.green),
-                      BarChartRodStackItem(6, 9, Colors.blue),
-                    ],
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  icon: Icon(
+                    isPlaying ? Icons.pause : Icons.play_arrow,
+                    color: const Color(0xff0f4a3c),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      isPlaying = !isPlaying;
+                      if (isPlaying) {
+                        refreshState();
+                      }
+                    });
+                  },
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  BarChartGroupData makeGroupData(
+    int x,
+    double y, {
+    bool isTouched = false,
+    Color barColor = Colors.white,
+    double width = 22,
+    List<int> showTooltips = const [],
+  }) {
+    return BarChartGroupData(
+      x: x,
+      barRods: [
+        BarChartRodData(
+          y: isTouched ? y + 1 : y,
+          colors: isTouched ? [Colors.yellow] : [barColor],
+          width: width,
+          backDrawRodData: BackgroundBarChartRodData(
+            show: true,
+            y: 20,
+            colors: [barBackgroundColor],
+          ),
+        ),
+      ],
+      showingTooltipIndicators: showTooltips,
+    );
+  }
+
+  List<BarChartGroupData> showingGroups() => List.generate(7, (i) {
+        switch (i) {
+          case 0:
+            return makeGroupData(0, 5, isTouched: i == touchedIndex);
+          case 1:
+            return makeGroupData(1, 6.5, isTouched: i == touchedIndex);
+          case 2:
+            return makeGroupData(2, 5, isTouched: i == touchedIndex);
+          case 3:
+            return makeGroupData(3, 7.5, isTouched: i == touchedIndex);
+          case 4:
+            return makeGroupData(4, 9, isTouched: i == touchedIndex);
+          case 5:
+            return makeGroupData(5, 11.5, isTouched: i == touchedIndex);
+          case 6:
+            return makeGroupData(6, 6.5, isTouched: i == touchedIndex);
+          default:
+            return throw Error();
+        }
+      });
+
+  BarChartData mainBarData() {
+    return BarChartData(
+      barTouchData: BarTouchData(
+        touchTooltipData: BarTouchTooltipData(
+            tooltipBgColor: Colors.blueGrey,
+            getTooltipItem: (group, groupIndex, rod, rodIndex) {
+              String weekDay;
+              switch (group.x.toInt()) {
+                case 0:
+                  weekDay = 'Monday';
+                  break;
+                case 1:
+                  weekDay = 'Tuesday';
+                  break;
+                case 2:
+                  weekDay = 'Wednesday';
+                  break;
+                case 3:
+                  weekDay = 'Thursday';
+                  break;
+                case 4:
+                  weekDay = 'Friday';
+                  break;
+                case 5:
+                  weekDay = 'Saturday';
+                  break;
+                case 6:
+                  weekDay = 'Sunday';
+                  break;
+                default:
+                  throw Error();
+              }
+              return BarTooltipItem(
+                weekDay + '\n',
+                TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: (rod.y - 1).toString(),
+                    style: TextStyle(
+                      color: Colors.yellow,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ],
               );
-            }).toList(),
-            // 坐标轴上的刻度设置
-            titlesData: FlTitlesData(
-              show: true,
-              bottomTitles: SideTitles(
-                  // 格式化axis
-                  getTitles: (text) {
-                    return "${text.toInt()}周";
-                  },
-                  // 设置字体颜色
-                  getTextStyles: (text) {
-                    return TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.blue);
-                  },
-                  // 倾斜，旋转
-                  rotateAngle: 45,
-                  showTitles: true),
-              leftTitles: SideTitles(
-                  // 格式化axis
-                  getTitles: (text) {
-                    return "${text.toInt()}";
-                  },
-                  // 设置字体颜色
-                  getTextStyles: (text) {
-                    return TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.blue);
-                  },
-                  // 倾斜，旋转
-                  rotateAngle: -45,
-                  showTitles: true),
-              rightTitles: SideTitles(
-                  // 格式化axis
-                  getTitles: (text) {
-                    return "${text.toInt()}";
-                  },
-                  // 设置字体颜色
-                  getTextStyles: (text) {
-                    return TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.blue);
-                  },
-                  // 倾斜，旋转
-                  rotateAngle: -45,
-                  showTitles: true),
-            ),
-            // 上下左右标题
-            axisTitleData: FlAxisTitleData(
-              topTitle: AxisTitle(
-                  margin: 25,
-                  titleText: "柱状图",
-                  showTitle: true,
-                  textStyle: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.red)),
-              bottomTitle: AxisTitle(titleText: "bottomTitle", showTitle: true),
-              leftTitle: AxisTitle(
-                  titleText: "leftTitle", showTitle: true, reservedSize: 20),
-              rightTitle: AxisTitle(
-                titleText: "rightTitle",
-                showTitle: true,
-                reservedSize: 20,
-              ),
-            ),
-            // 范围注释
-            rangeAnnotations: RangeAnnotations(horizontalRangeAnnotations: [
-              // HorizontalRangeAnnotation(y1: 1, y2: 2, color: Colors.amber),
-            ], verticalRangeAnnotations: [
-              // VerticalRangeAnnotation(x1: 0, x2: 0.5, color: Colors.blue)
-            ]),
-
-            // 图表背景颜色
-            backgroundColor: Color(0xff2D4261),
-            // barTouch数据,点击每个bar显示数据的样式
-            barTouchData: BarTouchData(
-              enabled: true,
-              // 触摸精度阈值
-              touchExtraThreshold: EdgeInsets.all(4),
-              // 是否允许触摸bar的背景，触发触摸事件
-              allowTouchBarBackDraw: false,
-              // 触摸bar是否显示提示框
-              handleBuiltInTouches: true,
-              // 触摸bar回调函数
-              touchCallback: (barTouchResponse) {
-                print(barTouchResponse.touchInput);
-              },
-              // 触摸提示的内容区域
-              touchTooltipData: BarTouchTooltipData(
-                  // 背景颜色
-                  tooltipBgColor: Colors.grey.shade800,
-                  // 圆角radius
-                  tooltipRoundedRadius: 10,
-                  // padding
-                  tooltipPadding:
-                      EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                  // margin
-                  tooltipMargin: 10,
-                  // maxContextWidth
-                  maxContentWidth: 120,
-                  // 提示框显示，相当于格式化显示
-                  getTooltipItem:
-                      (barChartGroupData, int_1, barChartRodData, int_2) {
-                    return BarTooltipItem(
-                        barChartRodData.y.toStringAsPrecision(2),
-                        TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                        children: []);
-                  }),
-            ),
-            // gridData表格
-            gridData: FlGridData(
-              drawVerticalLine: true,
-              drawHorizontalLine: false,
-              getDrawingHorizontalLine: (line) {
-                return FlLine(
-                    // color: Colors.white,
-                    // strokeWidth: 1,
-                    // dashArray: [5, 10],
-                    );
-              },
-            ),
-            // BorderData,图表的边框
-            borderData: FlBorderData(
-              border: Border.all(
-                  color: Colors.amber, width: 2, style: BorderStyle.values[1]),
-            ),
-          ),
-          swapAnimationDuration: Duration(milliseconds: 150), // Optional
-          swapAnimationCurve: Curves.linear),
+            }),
+        touchCallback: (barTouchResponse) {
+          setState(() {
+            if (barTouchResponse.spot != null &&
+                barTouchResponse.touchInput is! PointerUpEvent &&
+                barTouchResponse.touchInput is! PointerExitEvent) {
+              touchedIndex = barTouchResponse.spot!.touchedBarGroupIndex;
+            } else {
+              touchedIndex = -1;
+            }
+          });
+        },
+      ),
+      titlesData: FlTitlesData(
+        show: true,
+        bottomTitles: SideTitles(
+          showTitles: true,
+          getTextStyles: (value) => const TextStyle(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+          margin: 16,
+          getTitles: (double value) {
+            switch (value.toInt()) {
+              case 0:
+                return 'M';
+              case 1:
+                return 'T';
+              case 2:
+                return 'W';
+              case 3:
+                return 'T';
+              case 4:
+                return 'F';
+              case 5:
+                return 'S';
+              case 6:
+                return 'S';
+              default:
+                return '';
+            }
+          },
+        ),
+        leftTitles: SideTitles(
+          showTitles: false,
+        ),
+      ),
+      borderData: FlBorderData(
+        show: false,
+      ),
+      barGroups: showingGroups(),
     );
+  }
+
+  BarChartData randomData() {
+    return BarChartData(
+      barTouchData: BarTouchData(
+        enabled: false,
+      ),
+      titlesData: FlTitlesData(
+        show: true,
+        bottomTitles: SideTitles(
+          showTitles: true,
+          getTextStyles: (value) => const TextStyle(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+          margin: 16,
+          getTitles: (double value) {
+            switch (value.toInt()) {
+              case 0:
+                return 'M';
+              case 1:
+                return 'T';
+              case 2:
+                return 'W';
+              case 3:
+                return 'T';
+              case 4:
+                return 'F';
+              case 5:
+                return 'S';
+              case 6:
+                return 'S';
+              default:
+                return '';
+            }
+          },
+        ),
+        leftTitles: SideTitles(
+          showTitles: false,
+        ),
+      ),
+      borderData: FlBorderData(
+        show: false,
+      ),
+      barGroups: List.generate(7, (i) {
+        switch (i) {
+          case 0:
+            return makeGroupData(0, Random().nextInt(15).toDouble() + 6,
+                barColor: widget.availableColors[
+                    Random().nextInt(widget.availableColors.length)]);
+          case 1:
+            return makeGroupData(1, Random().nextInt(15).toDouble() + 6,
+                barColor: widget.availableColors[
+                    Random().nextInt(widget.availableColors.length)]);
+          case 2:
+            return makeGroupData(2, Random().nextInt(15).toDouble() + 6,
+                barColor: widget.availableColors[
+                    Random().nextInt(widget.availableColors.length)]);
+          case 3:
+            return makeGroupData(3, Random().nextInt(15).toDouble() + 6,
+                barColor: widget.availableColors[
+                    Random().nextInt(widget.availableColors.length)]);
+          case 4:
+            return makeGroupData(4, Random().nextInt(15).toDouble() + 6,
+                barColor: widget.availableColors[
+                    Random().nextInt(widget.availableColors.length)]);
+          case 5:
+            return makeGroupData(5, Random().nextInt(15).toDouble() + 6,
+                barColor: widget.availableColors[
+                    Random().nextInt(widget.availableColors.length)]);
+          case 6:
+            return makeGroupData(6, Random().nextInt(15).toDouble() + 6,
+                barColor: widget.availableColors[
+                    Random().nextInt(widget.availableColors.length)]);
+          default:
+            return throw Error();
+        }
+      }),
+    );
+  }
+
+  Future<dynamic> refreshState() async {
+    setState(() {});
+    await Future<dynamic>.delayed(
+        animDuration + const Duration(milliseconds: 50));
+    if (isPlaying) {
+      await refreshState();
+    }
   }
 }

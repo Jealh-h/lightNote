@@ -5,12 +5,16 @@ INJECTED from D:\MyFrontEndFile\flutter\lightNote\lightnote\android\app\src\main
 INJECTED from D:\MyFrontEndFile\flutter\lightNote\lightnote\android\app\src\main\AndroidManifest.xml:1:1-49:12
 INJECTED from D:\MyFrontEndFile\flutter\lightNote\lightnote\android\app\src\main\AndroidManifest.xml:1:1-49:12
 MERGED from D:\MyFrontEndFile\flutter\lightNote\lightnote\android\app\src\main\AndroidManifest.xml:1:1-49:12
+MERGED from [:image_picker] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\image_picker\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-19:12
+MERGED from [:flutter_plugin_android_lifecycle] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\flutter_plugin_android_lifecycle\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
+MERGED from [:shared_preferences] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\shared_preferences\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:fluttertoast] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\fluttertoast\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:amap_flutter_location] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\amap_flutter_location\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:location] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\location\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-18:12
 MERGED from [:permission_handler] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\permission_handler\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
-MERGED from [com.google.android.gms:play-services-location:16.0.0] C:\Users\ºúºã¶«\.gradle\caches\transforms-2\files-2.1\0780024de329b27586179035c49a974a\jetified-play-services-location-16.0.0\AndroidManifest.xml:2:1-9:12
+MERGED from [androidx.exifinterface:exifinterface:1.3.0] C:\Users\ºúºã¶«\.gradle\caches\transforms-2\files-2.1\699f67f2d72ad9902250b3e1c41f0647\exifinterface-1.3.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.core:core-ktx:1.3.2] C:\Users\ºúºã¶«\.gradle\caches\transforms-2\files-2.1\9e616e3db101c792001b6b2e73e1b52f\jetified-core-ktx-1.3.2\AndroidManifest.xml:2:1-9:12
+MERGED from [com.google.android.gms:play-services-location:16.0.0] C:\Users\ºúºã¶«\.gradle\caches\transforms-2\files-2.1\0780024de329b27586179035c49a974a\jetified-play-services-location-16.0.0\AndroidManifest.xml:2:1-9:12
 MERGED from [com.google.android.gms:play-services-base:16.0.1] C:\Users\ºúºã¶«\.gradle\caches\transforms-2\files-2.1\bdc33b4c3faaba6d40db9aba5c108420\jetified-play-services-base-16.0.1\AndroidManifest.xml:17:1-29:12
 MERGED from [com.google.android.gms:play-services-places-placereport:16.0.0] C:\Users\ºúºã¶«\.gradle\caches\transforms-2\files-2.1\60a5f2d611abff1bdb9152290508ab48\jetified-play-services-places-placereport-16.0.0\AndroidManifest.xml:17:1-24:12
 MERGED from [com.google.android.gms:play-services-tasks:16.0.1] C:\Users\ºúºã¶«\.gradle\caches\transforms-2\files-2.1\1a3e6d645a232ede4d7990eb7527ba23\jetified-play-services-tasks-16.0.1\AndroidManifest.xml:2:1-9:12
@@ -111,6 +115,8 @@ ADDED from D:\MyFrontEndFile\flutter\lightNote\lightnote\android\app\src\main\An
 		ADDED from D:\MyFrontEndFile\flutter\lightNote\lightnote\android\app\src\main\AndroidManifest.xml:21:20-76
 application
 ADDED from D:\MyFrontEndFile\flutter\lightNote\lightnote\android\app\src\main\AndroidManifest.xml:23:3-48:17
+MERGED from [:image_picker] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\image_picker\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-17:19
+MERGED from [:image_picker] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\image_picker\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-17:19
 MERGED from [:location] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\location\intermediates\library_manifest\debug\AndroidManifest.xml:10:5-16:19
 MERGED from [:location] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\location\intermediates\library_manifest\debug\AndroidManifest.xml:10:5-16:19
 MERGED from [com.google.android.gms:play-services-location:16.0.0] C:\Users\ºúºã¶«\.gradle\caches\transforms-2\files-2.1\0780024de329b27586179035c49a974a\jetified-play-services-location-16.0.0\AndroidManifest.xml:7:5-20
@@ -195,6 +201,12 @@ uses-sdk
 INJECTED from D:\MyFrontEndFile\flutter\lightNote\lightnote\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from D:\MyFrontEndFile\flutter\lightNote\lightnote\android\app\src\main\AndroidManifest.xml
 INJECTED from D:\MyFrontEndFile\flutter\lightNote\lightnote\android\app\src\main\AndroidManifest.xml
+MERGED from [:image_picker] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\image_picker\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:image_picker] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\image_picker\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:flutter_plugin_android_lifecycle] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\flutter_plugin_android_lifecycle\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:flutter_plugin_android_lifecycle] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\flutter_plugin_android_lifecycle\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:shared_preferences] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\shared_preferences\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:shared_preferences] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\shared_preferences\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:fluttertoast] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\fluttertoast\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:fluttertoast] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\fluttertoast\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:amap_flutter_location] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\amap_flutter_location\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
@@ -203,10 +215,12 @@ MERGED from [:location] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\loca
 MERGED from [:location] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\location\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:permission_handler] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\permission_handler\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:permission_handler] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\permission_handler\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
-MERGED from [com.google.android.gms:play-services-location:16.0.0] C:\Users\ºúºã¶«\.gradle\caches\transforms-2\files-2.1\0780024de329b27586179035c49a974a\jetified-play-services-location-16.0.0\AndroidManifest.xml:5:5-44
-MERGED from [com.google.android.gms:play-services-location:16.0.0] C:\Users\ºúºã¶«\.gradle\caches\transforms-2\files-2.1\0780024de329b27586179035c49a974a\jetified-play-services-location-16.0.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.exifinterface:exifinterface:1.3.0] C:\Users\ºúºã¶«\.gradle\caches\transforms-2\files-2.1\699f67f2d72ad9902250b3e1c41f0647\exifinterface-1.3.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.exifinterface:exifinterface:1.3.0] C:\Users\ºúºã¶«\.gradle\caches\transforms-2\files-2.1\699f67f2d72ad9902250b3e1c41f0647\exifinterface-1.3.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.core:core-ktx:1.3.2] C:\Users\ºúºã¶«\.gradle\caches\transforms-2\files-2.1\9e616e3db101c792001b6b2e73e1b52f\jetified-core-ktx-1.3.2\AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.core:core-ktx:1.3.2] C:\Users\ºúºã¶«\.gradle\caches\transforms-2\files-2.1\9e616e3db101c792001b6b2e73e1b52f\jetified-core-ktx-1.3.2\AndroidManifest.xml:5:5-7:41
+MERGED from [com.google.android.gms:play-services-location:16.0.0] C:\Users\ºúºã¶«\.gradle\caches\transforms-2\files-2.1\0780024de329b27586179035c49a974a\jetified-play-services-location-16.0.0\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-location:16.0.0] C:\Users\ºúºã¶«\.gradle\caches\transforms-2\files-2.1\0780024de329b27586179035c49a974a\jetified-play-services-location-16.0.0\AndroidManifest.xml:5:5-44
 MERGED from [com.google.android.gms:play-services-base:16.0.1] C:\Users\ºúºã¶«\.gradle\caches\transforms-2\files-2.1\bdc33b4c3faaba6d40db9aba5c108420\jetified-play-services-base-16.0.1\AndroidManifest.xml:20:5-44
 MERGED from [com.google.android.gms:play-services-base:16.0.1] C:\Users\ºúºã¶«\.gradle\caches\transforms-2\files-2.1\bdc33b4c3faaba6d40db9aba5c108420\jetified-play-services-base-16.0.1\AndroidManifest.xml:20:5-44
 MERGED from [com.google.android.gms:play-services-places-placereport:16.0.0] C:\Users\ºúºã¶«\.gradle\caches\transforms-2\files-2.1\60a5f2d611abff1bdb9152290508ab48\jetified-play-services-places-placereport-16.0.0\AndroidManifest.xml:20:5-44
@@ -277,6 +291,22 @@ INJECTED from D:\MyFrontEndFile\flutter\lightNote\lightnote\android\app\src\debu
 	android:minSdkVersion
 		INJECTED from D:\MyFrontEndFile\flutter\lightNote\lightnote\android\app\src\main\AndroidManifest.xml
 		INJECTED from D:\MyFrontEndFile\flutter\lightNote\lightnote\android\app\src\debug\AndroidManifest.xml
+provider#io.flutter.plugins.imagepicker.ImagePickerFileProvider
+ADDED from [:image_picker] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\image_picker\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-16:20
+	android:grantUriPermissions
+		ADDED from [:image_picker] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\image_picker\intermediates\library_manifest\debug\AndroidManifest.xml:12:13-47
+	android:authorities
+		ADDED from [:image_picker] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\image_picker\intermediates\library_manifest\debug\AndroidManifest.xml:10:13-74
+	android:exported
+		ADDED from [:image_picker] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\image_picker\intermediates\library_manifest\debug\AndroidManifest.xml:11:13-37
+	android:name
+		ADDED from [:image_picker] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\image_picker\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-82
+meta-data#android.support.FILE_PROVIDER_PATHS
+ADDED from [:image_picker] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\image_picker\intermediates\library_manifest\debug\AndroidManifest.xml:13:13-15:75
+	android:resource
+		ADDED from [:image_picker] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\image_picker\intermediates\library_manifest\debug\AndroidManifest.xml:15:17-72
+	android:name
+		ADDED from [:image_picker] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\image_picker\intermediates\library_manifest\debug\AndroidManifest.xml:14:17-67
 service#com.lyokone.location.FlutterLocationService
 ADDED from [:location] D:\MyFrontEndFile\flutter\lightNote\lightnote\build\location\intermediates\library_manifest\debug\AndroidManifest.xml:11:9-15:56
 	android:enabled

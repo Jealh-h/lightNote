@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:lightnote/components/circle_button.dart';
 import 'package:lightnote/components/input_container.dart';
 import 'package:lightnote/components/primary_button.dart';
+import 'package:lightnote/components/verifycode_button.dart';
+import 'package:lightnote/constants/const.dart';
+import 'package:lightnote/model/emailUrl.dart';
+import 'package:lightnote/model/uuid.dart';
+import 'package:lightnote/screens/index/index.dart';
+import 'package:lightnote/utils/http.dart';
+import 'package:lightnote/utils/utils.dart';
+import 'package:provider/provider.dart';
 
 class ForgetPassWord extends StatefulWidget {
   @override
@@ -16,6 +26,7 @@ class ForgetPassWordState extends State<ForgetPassWord> {
   final TextEditingController mailController = TextEditingController();
   final TextEditingController passController = TextEditingController();
   final TextEditingController confirmController = TextEditingController();
+  final TextEditingController codeController = TextEditingController();
 
   @override
   void initState() {
@@ -66,7 +77,9 @@ class ForgetPassWordState extends State<ForgetPassWord> {
           controller: mailController,
           icon: Icons.email,
           hintText: "请输入邮箱地址",
-          onChanged: (string) {},
+          onChanged: (string) {
+            context.read<EmailModel>().setEmail(string);
+          },
         ),
         // 验证码
         Container(
@@ -87,20 +100,14 @@ class ForgetPassWordState extends State<ForgetPassWord> {
                           color: Color(0xFFD3D3D3).withOpacity(0.84)),
                     ]),
                 child: TextField(
+                  controller: codeController,
                   decoration: InputDecoration(
                       hintText: "请输入验证码", border: InputBorder.none),
                 ),
               ),
               Spacer(),
               // 获取验证码
-              Container(
-                height: 50,
-                width: 100,
-                alignment: Alignment.center,
-                child: GestureDetector(
-                  child: Text("获取验证码"),
-                ),
-              ),
+              VerifyCodeButton()
             ],
           ),
         ),
@@ -157,14 +164,28 @@ class ForgetPassWordState extends State<ForgetPassWord> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          leadingWidth: 40,
+          leading: CircleButton(
+              icon: Icon(
+                Icons.arrow_back_ios_new,
+                color: Colors.black,
+              ),
+              press: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Index()),
+                );
+              },
+              backgroundColor: Colors.transparent)),
       body: Container(
         alignment: Alignment.center,
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
-                height: size.height * 0.15,
-              ),
               // 进度条
               Container(
                 width: size.width * 0.8,
@@ -202,11 +223,7 @@ class ForgetPassWordState extends State<ForgetPassWord> {
                   color: Colors.amber[900],
                   text: currentStep == 3 ? "完成" : "下一步",
                   press: () {
-                    if (currentStep < 3) {
-                      setState(() {
-                        currentStep++;
-                      });
-                    }
+                    handleNextStep();
                   },
                 ),
               ),
@@ -215,6 +232,50 @@ class ForgetPassWordState extends State<ForgetPassWord> {
         ),
       ),
     );
+  }
+
+  handleNextStep() {
+    switch (currentStep) {
+      case 1:
+        {
+          // 邮件不合理
+          if (!matchEmail(mailController.text)) {
+            EasyLoading.showError("请输入正确邮件信息");
+          } else if (codeController.text == null ||
+              codeController.text.isEmpty) {
+            EasyLoading.showError("请输入验证码");
+          } else {
+            httpPost(uri: baseUrl + "/api/verifycode", param: {
+              "uuid": context.read<UUidModel>().uuid,
+              "vcode": codeController.text
+            });
+          }
+
+          print(currentStep);
+          int a = 3;
+        }
+        break;
+      case 2:
+        {
+          print(currentStep + 1);
+          int a = 3;
+        }
+        break;
+      case 3:
+        {
+          print(currentStep + 2);
+          int a = 3;
+        }
+        break;
+      default:
+        break;
+    }
+
+    if (currentStep < 3) {
+      setState(() {
+        currentStep++;
+      });
+    }
   }
 }
 

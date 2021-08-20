@@ -4,13 +4,13 @@ import 'package:lightnote/constant.dart';
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton({
     required this.text,
-    required this.press,
+    this.press,
     this.color = PrimaryColor,
     this.padding = const EdgeInsets.all(DefaultPadding * 0.75),
   });
 
   final String text;
-  final VoidCallback press;
+  final VoidCallback? press;
   final color;
   final EdgeInsets padding;
 
@@ -23,6 +23,8 @@ class PrimaryButton extends StatelessWidget {
       minWidth: double.infinity,
       color: color,
       padding: padding,
+      disabledColor: Colors.black38,
+      disabledTextColor: Colors.black12,
       onPressed: press,
       child: Text(
         text,

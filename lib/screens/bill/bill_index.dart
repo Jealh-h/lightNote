@@ -10,10 +10,75 @@ class BillIndex extends StatefulWidget {
 
 class BillIndexState extends State<BillIndex> {
   final textStyle = TextStyle(
-      fontSize: 24, fontWeight: FontWeight.bold, fontFamily: "TangYuan");
+      fontSize: 36, fontWeight: FontWeight.bold, fontFamily: "TangYuan");
   final amountTextStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
   final typeTextStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
+  DateTime? _chooseTime;
 
+//  日期选择
+  chooseDate() {
+    // showDatePicker(
+    //     context: context,
+    //     initialDate: DateTime.now(),
+    //     firstDate: DateTime(2020, 6),
+    //     lastDate: DateTime.now(),
+    //     initialDatePickerMode: DatePickerMode.year);
+    showCupertinoModalPopup(
+        builder: (BuildContext context) {
+          Size size = MediaQuery.of(context).size;
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            height: size.height * 0.55,
+            width: size.width,
+            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CupertinoButton(
+                      child: Text("取消"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    CupertinoButton(
+                      child: Text("完成"),
+                      onPressed: () {
+                        print(_chooseTime.toString());
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
+                Container(
+                  height: size.height * 0.4,
+                  child: CupertinoDatePicker(
+                    mode: CupertinoDatePickerMode.date,
+                    maximumYear: DateTime.now().year,
+                    minimumYear: DateTime.now().year - 2,
+                    onDateTimeChanged: (DateTime value) {
+                      _chooseTime = value;
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+        context: context);
+  }
+
+  //
+  // @{time} 选定的日期
+  //
+  updateDate(DateTime time) {
+    // 发送请求获取数据
+    // setState设置数据更新内容
+  }
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -61,7 +126,8 @@ class BillIndexState extends State<BillIndex> {
                       TextSpan(children: [
                         TextSpan(
                             text: "¥",
-                            style: TextStyle(fontWeight: FontWeight.bold)),
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold)),
                         TextSpan(
                           text: "18.00",
                           style: textStyle,
@@ -71,9 +137,41 @@ class BillIndexState extends State<BillIndex> {
                   ],
                 ),
               ),
-              Text(
-                "历史账单-1234567890",
-                style: textStyle,
+              // 日期选择
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "历史账单",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      chooseDate();
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: Colors.grey.shade200,
+                      ),
+                      height: 30,
+                      // width: 100,
+                      child: Row(
+                        children: [
+                          Text("2021年7月"),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 2),
+                            color: Colors.grey.shade300,
+                            height: 20,
+                            width: 2,
+                          ),
+                          Icon(Icons.date_range)
+                        ],
+                      ),
+                    ),
+                  )
+                ],
               ),
               // 账单
               Container(
@@ -123,7 +221,10 @@ class BillIndexState extends State<BillIndex> {
                               leading: Icon(Icons.traffic),
                               trailing: Text(
                                 "-20.00",
-                                style: amountTextStyle,
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red),
                               ),
                               title: Text(
                                 "交通",
@@ -134,8 +235,11 @@ class BillIndexState extends State<BillIndex> {
                             ListTile(
                               leading: Icon(Icons.traffic),
                               trailing: Text(
-                                "-20.00",
-                                style: amountTextStyle,
+                                "+20.00",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.amber.shade600),
                               ),
                               title: Text(
                                 "交通",

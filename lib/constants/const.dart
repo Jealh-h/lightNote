@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_weather_bg_null_safety/utils/weather_type.dart';
 
@@ -99,3 +97,34 @@ var noteBookCover = [
   "assets/images/notebook_cover6.png",
   "assets/images/notebook_cover7.png",
 ];
+
+const consumptionType = [
+  {
+    "name": "服饰",
+    "icon": Icon(Icons.local_mall),
+  },
+  {
+    "name": "餐饮",
+    "icon": Icon(Icons.fastfood),
+  },
+  {
+    "name": "交通",
+    "icon": Icon(Icons.directions_car),
+  },
+  {
+    "name": "其他",
+    "icon": Icon(Icons.error_outline),
+  }
+];
+
+const baseUrl = "http://10.0.2.2:7001";
+
+const defaultAvatarUrl = "http://47.99.199.187/images/default_avatar.jpg";
+
+class User {
+  String username;
+  String email;
+  String password;
+  String avatarUrl = defaultAvatarUrl;
+  User(this.username, this.email, this.avatarUrl, this.password);
+}

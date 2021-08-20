@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:lightnote/screens/about/about.dart';
+import 'package:lightnote/screens/forgetPassword/ForgetPassWord.dart';
+import 'package:lightnote/utils/utils.dart';
 
 class DrawerScreen extends StatefulWidget {
   @override
@@ -65,9 +68,67 @@ class DrawerScreenState extends State<DrawerScreen> {
                     style: textStyle,
                   ),
                 ],
-              )
+              ),
+              Row(
+                children: [
+                  Icon(
+                    Icons.edit,
+                    color: Colors.white,
+                  ),
+                  TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        "编辑信息",
+                        style: textStyle,
+                      )),
+                ],
+              ),
+              Row(
+                children: [
+                  Icon(
+                    Icons.vpn_key,
+                    color: Colors.white,
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ForgetPassWord(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "更改密码",
+                        style: textStyle,
+                      )),
+                ],
+              ),
+              // 关于
+              Row(
+                children: [
+                  Icon(
+                    Icons.info,
+                    color: Colors.white,
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AboutScreen()));
+                      },
+                      child: Text(
+                        "关于我们",
+                        style: textStyle,
+                      )),
+                ],
+              ),
             ],
           ),
+          // 设置
           Row(
             children: [
               Icon(
@@ -88,10 +149,16 @@ class DrawerScreenState extends State<DrawerScreen> {
                 Icons.logout,
                 color: Colors.white,
               ),
-              Text(
-                "退出登录",
-                style: textStyle,
-              )
+              // 退出登录
+              TextButton(
+                onPressed: () {
+                  signOut(context);
+                },
+                child: Text(
+                  "退出登录",
+                  style: textStyle,
+                ),
+              ),
             ],
           )
         ],

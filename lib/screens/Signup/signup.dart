@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:lightnote/components/input_container.dart';
 import 'package:lightnote/components/primary_button.dart';
 import 'package:lightnote/components/tail_input_container.dart';
+import 'package:lightnote/constants/const.dart';
+import 'package:lightnote/utils/http.dart';
+import 'package:lightnote/utils/utils.dart';
 
 import '../../constant.dart';
 
@@ -16,6 +20,8 @@ class SignUp extends StatefulWidget {
 class SignUpState extends State<SignUp> {
   final TextEditingController username = TextEditingController();
   final TextEditingController password = TextEditingController();
+  final TextEditingController email = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -29,6 +35,7 @@ class SignUpState extends State<SignUp> {
                 SizedBox(
                   height: size.height * 0.2,
                 ),
+                // welcome
                 Text.rich(
                   TextSpan(
                     children: [
@@ -52,14 +59,23 @@ class SignUpState extends State<SignUp> {
                 SizedBox(
                   height: size.height * 0.05,
                 ),
+                // username
                 InputContainer(
                   controller: username,
                   hintText: "请输入账户名",
                   onChanged: (string) {},
                 ),
+                // password
                 TailInputContainer(
                   controller: password,
                   hintText: "请输入账户密码",
+                  onChanged: (string) {},
+                ),
+                // email
+                InputContainer(
+                  icon: Icons.email,
+                  controller: email,
+                  hintText: "请输入邮箱地址",
                   onChanged: (string) {},
                 ),
                 Container(
@@ -67,7 +83,9 @@ class SignUpState extends State<SignUp> {
                   child: PrimaryButton(
                     color: IconColor,
                     text: "注 册",
-                    press: () async {},
+                    press: () {
+                      handleSignUp();
+                    },
                   ),
                 ),
                 Row(
@@ -93,5 +111,35 @@ class SignUpState extends State<SignUp> {
         ],
       ),
     );
+  }
+
+  handleSignUp() async {
+    if (username.text == "" || password.text == "" || email.text == "") {
+      // 存在空值
+      EasyLoading.showInfo("请输入完整信息");
+      return;
+    } else if (!matchEmail(email.text)) {
+      EasyLoading.showError("请输入正确邮件信息");
+      return;
+    } else {
+      EasyLoading.show();
+      var res = await httpPost(uri: baseUrl + "/api/signup", param: {
+        "email": email.text,
+        "username": username.text,
+        "password": password.text
+      });
+      EasyLoading.dismiss();
+      if (res['status'] == "fail") {
+        EasyLoading.showError(res["data"]);
+      } else {
+        setState(() {
+          username.text = '';
+          password.text = '';
+          email.text = '';
+        });
+        EasyLoading.showSuccess(res["data"]);
+      }
+      return;
+    }
   }
 }

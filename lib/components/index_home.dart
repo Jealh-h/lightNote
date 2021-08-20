@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:lightnote/constants/const.dart';
 import 'package:lightnote/screens/bill/bill.dart';
 import 'package:lightnote/screens/note/noteScreen.dart';
+import 'package:lightnote/screens/profile/profile.dart';
 import 'package:lightnote/utils/http.dart';
 // import 'dart:ui';
 
 import 'package:flutter_weather_bg_null_safety/bg/weather_bg.dart';
+import 'package:lightnote/utils/utils.dart';
 
 class IndexHome extends StatefulWidget {
   TextStyle dateTextStyle = TextStyle(
@@ -29,7 +31,8 @@ class IndexStateScreen extends State<IndexHome> {
   double radius = 0;
   String _time = '';
   String _date = '';
-  Timer? _timer = null;
+  Timer? _timer;
+  Map userInfo = {};
 
   bool isDrawerOpen = false;
 
@@ -54,12 +57,14 @@ class IndexStateScreen extends State<IndexHome> {
   };
   @override
   void initState() {
-    print("initstate");
     getWeather();
     setTimer();
-    setState(() {
-      weatherInfo;
-    });
+    getUserInfo().then((value) => {
+          setState(() {
+            weatherInfo;
+            userInfo = value;
+          })
+        });
   }
 
   @override
@@ -130,21 +135,49 @@ class IndexStateScreen extends State<IndexHome> {
           ),
           // 菜单行
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
-                  onPressed: () {
-                    setState(() {
-                      yOffset = isDrawerOpen ? 0 : size.height * 0.1;
-                      xOffset = isDrawerOpen ? 0 : size.width * 0.7;
-                      scaleFactor = isDrawerOpen ? 1 : 0.8;
-                      radius = isDrawerOpen ? 0 : 50;
-                      isDrawerOpen = !isDrawerOpen;
-                    });
-                  },
-                  icon: Image.asset(
-                    "assets/icons/menu_light.png",
-                    height: 36,
-                    width: 36,
+                onPressed: () {
+                  setState(() {
+                    yOffset = isDrawerOpen ? 0 : size.height * 0.1;
+                    xOffset = isDrawerOpen ? 0 : size.width * 0.7;
+                    scaleFactor = isDrawerOpen ? 1 : 0.8;
+                    radius = isDrawerOpen ? 0 : 50;
+                    isDrawerOpen = !isDrawerOpen;
+                  });
+                },
+                icon: Image.asset(
+                  "assets/icons/menu_light.png",
+                  height: 36,
+                  width: 36,
+                ),
+              ),
+              Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  child: ClipOval(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen(),
+                          ),
+                        );
+                      },
+                      child: userInfo["id"] == null
+                          ? Image.network(
+                              defaultAvatarUrl,
+                              width: 36,
+                              height: 36,
+                            )
+                          : Image.network(
+                              userInfo["avatarUrl"],
+                              width: 36,
+                              height: 36,
+                            ),
+                    ),
                   ))
             ],
           ),
@@ -162,7 +195,6 @@ class IndexStateScreen extends State<IndexHome> {
                 children: [
                   // 天气背景
                   WeatherBg(
-                    // weatherType: WeatherType.cloudy,
                     weatherType:
                         weatherBgMap[weatherInfo["lives"][0]["weather"]]!,
                     width: size.width * 0.9,
@@ -173,7 +205,7 @@ class IndexStateScreen extends State<IndexHome> {
                     // margin: EdgeInsets.all(20),
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: Colors.black.withAlpha(16),
+                      color: Colors.black.withAlpha(10),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     width: size.width * 0.9,

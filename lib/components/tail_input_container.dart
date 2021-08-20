@@ -23,6 +23,8 @@ class TailInputContainer extends StatefulWidget {
 }
 
 class TailInputContainerState extends State<TailInputContainer> {
+  bool _obscureText = true;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -37,6 +39,7 @@ class TailInputContainerState extends State<TailInputContainer> {
       child: TextField(
         controller: widget.controller,
         onChanged: widget.onChanged,
+        obscureText: _obscureText,
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: widget.hintText,
@@ -44,9 +47,15 @@ class TailInputContainerState extends State<TailInputContainer> {
             widget.icon,
             color: IconColor,
           ),
-          suffixIcon: Icon(
-            widget.suffixIcon,
+          suffixIcon: IconButton(
+            icon: GestureDetector(
+              child:
+                  Icon(_obscureText ? Icons.visibility_off : widget.suffixIcon),
+            ),
             color: IconColor,
+            onPressed: () => setState(() {
+              _obscureText = !_obscureText;
+            }),
           ),
         ),
       ),

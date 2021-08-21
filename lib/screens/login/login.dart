@@ -205,7 +205,7 @@ class LoginScreenState extends State<LoginScreen> {
       if (result["status"] == 'success') {
         // 提示登录成功
         EasyLoading.showSuccess('登录成功');
-        setUserInfo(result["data"]);
+        await setUserInfo(result["data"]);
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => Index()));
       } else {

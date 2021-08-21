@@ -1,9 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:lightnote/components/circle_button.dart';
 import 'package:lightnote/components/notebookCover_picker.dart';
 import 'package:lightnote/constants/const.dart';
+import 'package:lightnote/model/cover.dart';
 import 'package:lightnote/screens/index/index.dart';
+import 'package:lightnote/screens/note/notelist/notelist.dart';
+import 'package:lightnote/utils/http.dart';
+import 'package:lightnote/utils/utils.dart';
+import 'package:provider/provider.dart';
 
 class NoteScreen extends StatefulWidget {
   @override
@@ -15,43 +21,16 @@ class NoteScreen extends StatefulWidget {
 class NoteScreenState extends State<NoteScreen> {
   var testArr;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final List _noteBookArr = [
-    {
-      "name": "记flutter笔记的",
-      "cover": "assets/images/notebook_cover1.png",
-      "desc": "这是描述信息",
-      "time": "2021/8/18 20:56"
-    },
-    {
-      "name": "记flutter笔记的",
-      "cover": "assets/images/notebook_cover2.png",
-      "desc": "这是描述信息",
-      "time": "2021/8/18 20:56"
-    },
-    {
-      "name": "记flutter笔记的555555555555",
-      "cover": "assets/images/notebook_cover3.png",
-      "desc": "这是描述信息",
-      "time": "2021/8/18 20:56"
-    },
-    {
-      "name": "记flutter笔记的555555555555",
-      "cover": "assets/images/notebook_cover1.png",
-      "desc": "这是描述信息",
-      "time": "2021/8/18 20:56"
-    },
-    {
-      "name": "记flutter笔记的",
-      "cover": "assets/images/notebook_cover7.png",
-      "desc": "这是描述信息",
-      "time": "2021/8/18 20:56"
-    },
-  ];
+  final TextEditingController title = TextEditingController();
+  final TextEditingController desc = TextEditingController();
+  Map<String, String?> userInfo = {};
+  List _noteBookArr = [];
+  bool loading = true;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    print("initstate_note");
+    loading = true;
+    uploadNotebookArr();
   }
 
   @override
@@ -76,9 +55,7 @@ class NoteScreenState extends State<NoteScreen> {
                 color: Colors.white,
               ),
               press: () {
-                showAddNoteDialog("123", context, successBack: () {
-                  print("object");
-                });
+                showAddNoteDialog("添加笔记本", context, addNoteBook);
               },
               backgroundColor: Colors.black)
         ],
@@ -111,7 +88,34 @@ class NoteScreenState extends State<NoteScreen> {
     );
   }
 
+  uploadNotebookArr() {
+    getUserInfo().then((value) async {
+      var result = await httpPost(
+          uri: baseUrl + '/api/getnotebook', param: {"userid": value["id"]});
+      if (mounted) {
+        setState(() {
+          userInfo = value;
+          _noteBookArr = result["data"];
+          loading = false;
+        });
+      }
+    });
+  }
+
   Widget buildNotePage(Size size) {
+    if (loading) {
+      return Column(
+        children: [
+          SizedBox(
+            height: 200,
+          ),
+          Center(
+            child: CircularProgressIndicator(),
+          ),
+          Text("加载中..."),
+        ],
+      );
+    }
     if (_noteBookArr.length == 0) {
       return Center(
         child: Column(
@@ -138,14 +142,19 @@ class NoteScreenState extends State<NoteScreen> {
       width: size.width,
       height: size.height * 0.84,
       child: GridView.count(
-          crossAxisCount: 2,
-          childAspectRatio: 0.6,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-          padding: EdgeInsets.symmetric(vertical: 10),
-          children: _noteBookArr
-              .map(
-                (e) => Container(
+        crossAxisCount: 2,
+        childAspectRatio: 0.6,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+        padding: EdgeInsets.symmetric(vertical: 10),
+        children: _noteBookArr
+            .map(
+              (e) => GestureDetector(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => NoteList()));
+                },
+                child: Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(15),
@@ -208,7 +217,7 @@ class NoteScreenState extends State<NoteScreen> {
                             // 子菜单
                             PopupMenuButton(
                               onSelected: (value) {
-                                print(value);
+                                handleSubmenu(value);
                               },
                               itemBuilder: (BuildContext context) {
                                 return [
@@ -244,14 +253,61 @@ class NoteScreenState extends State<NoteScreen> {
                     ],
                   ),
                 ),
-              )
-              .toList()),
+              ),
+            )
+            .toList(),
+      ),
     );
   }
 
+  // 处理 编辑删除 事件
+  handleSubmenu(e) async {
+    if (e["opr"] == "edit") {
+      title.text = e["name"];
+      desc.text = e["desc"];
+      showAddNoteDialog("编辑笔记本", context, () async {
+        var result = await httpPost(uri: baseUrl + "/api/addnotebook", param: {
+          "name": title.text,
+          "cover": context.read<CoverModel>().cover,
+          "desc": desc.text,
+          "time": getFormatTime(),
+          "userid": userInfo["id"],
+          "bid": "${e["bid"]}",
+          "opr": e["opr"]
+        });
+        print(result);
+        if (result["status"] == "success") {
+          EasyLoading.showSuccess(result["data"]);
+          Navigator.pop(context);
+          setState(() {
+            loading = true;
+          });
+          // 更新列表
+          uploadNotebookArr();
+        } else {
+          EasyLoading.showInfo(result["data"]);
+        }
+      });
+    } else {
+      // 删除
+      EasyLoading.show(status: "删除中。。");
+      var result = await httpPost(
+          uri: baseUrl + "/api/deletenotebook",
+          param: {"bid": "${e["bid"]}", "userid": userInfo["id"]});
+      if (result["status"] == "success") {
+        EasyLoading.dismiss();
+        uploadNotebookArr();
+        EasyLoading.showSuccess(result["data"]);
+      } else {
+        EasyLoading.dismiss();
+        EasyLoading.showSuccess(result["data"]);
+      }
+    }
+  }
+
   // 显示新增笔记本弹窗
-  void showAddNoteDialog(String message, BuildContext context,
-      {required Function successBack}) {
+  void showAddNoteDialog(
+      String message, BuildContext context, Function successFun) {
     Size size = MediaQuery.of(context).size;
     showDialog(
         context: context,
@@ -260,7 +316,7 @@ class NoteScreenState extends State<NoteScreen> {
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             title: Text(
-              '新建笔记本',
+              message,
               style: TextStyle(
                   fontFamily: 'TangYuan', fontWeight: FontWeight.bold),
             ),
@@ -274,6 +330,7 @@ class NoteScreenState extends State<NoteScreen> {
                       children: <Widget>[
                         // 名称框
                         TextFormField(
+                          controller: title,
                           decoration: const InputDecoration(
                             hintText: '请输入笔记本名称',
                           ),
@@ -286,6 +343,7 @@ class NoteScreenState extends State<NoteScreen> {
                         ),
                         // 描述框
                         TextFormField(
+                          controller: desc,
                           decoration: const InputDecoration(
                             hintText: '请输入描述',
                           ),
@@ -309,17 +367,11 @@ class NoteScreenState extends State<NoteScreen> {
             actions: [
               CupertinoButton(
                 child: Text("确定"),
-                onPressed: () {
-                  successBack();
-
-                  // Validate will return true if the form is valid, or false if
-                  // the form is invalid.
+                onPressed: () async {
                   // 验证正确
                   if (_formKey.currentState!.validate()) {
-                    print(_formKey.currentState);
-                    // Process data.
+                    successFun();
                   }
-                  Navigator.pop(context);
                 },
               ),
               CupertinoButton(
@@ -330,5 +382,28 @@ class NoteScreenState extends State<NoteScreen> {
             ],
           );
         });
+  }
+
+  // 添加笔记本
+  addNoteBook() async {
+    var newNote = {
+      "opr": "new",
+      "name": title.text,
+      "cover": context.read<CoverModel>().cover,
+      "desc": desc.text,
+      "time": getFormatTime(),
+      "userid": userInfo["id"],
+      "bid": getRandId(),
+    };
+    // 获取选择的信息
+    EasyLoading.show(status: "添加中");
+    await httpPost(uri: baseUrl + '/api/addnotebook', param: {...newNote});
+    setState(() {
+      _noteBookArr.add(newNote);
+    });
+    EasyLoading.dismiss();
+    // 设置初始封面
+    context.read<CoverModel>().setCoverl("assets/images/notebook_cover1.png");
+    Navigator.pop(context);
   }
 }

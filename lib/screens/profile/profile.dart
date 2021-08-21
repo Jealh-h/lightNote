@@ -6,7 +6,11 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lightnote/components/circle_button.dart';
+import 'package:lightnote/components/circle_icon.dart';
+import 'package:lightnote/constants/const.dart';
+import 'package:lightnote/screens/forgetPassword/ForgetPassWord.dart';
 import 'package:lightnote/screens/index/index.dart';
+import 'package:lightnote/utils/utils.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -17,6 +21,18 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final ImagePicker _picker = ImagePicker();
+
+  Map userInfo = {};
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserInfo().then((value) => {
+          setState(() {
+            userInfo = value;
+          })
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +59,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: Column(
         children: [
           AspectRatio(
-            aspectRatio: 1.2,
+            aspectRatio: 1.4,
             child: Card(
               margin: EdgeInsets.all(0),
-              elevation: 5,
+              elevation: 0,
               child: Container(
                 // margin: ,
                 width: size.width,
@@ -56,8 +72,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     // 头像
                     Positioned(
                       width: size.width,
-                      top: size.width / 1.2 * 0.25,
-                      // left: size.width / 1.2 * 0.5,
+                      top: size.width / 1.2 * 0.1,
                       child: Column(
                         children: [
                           // 头像
@@ -68,22 +83,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 border:
                                     Border.all(width: 5, color: Colors.blue)),
                             child: ClipOval(
-                              child: Image.asset(
-                                "assets/images/avatar.png",
-                                width: 64,
-                                height: 64,
-                              ),
+                              child: userInfo["id"] == null
+                                  ? Image.network(
+                                      defaultAvatarUrl,
+                                      width: 64,
+                                      height: 64,
+                                    )
+                                  : Image.network(
+                                      userInfo["avatarUrl"],
+                                      width: 64,
+                                      height: 64,
+                                    ),
                             ),
                           ),
                           SizedBox(
                             height: 20,
                           ),
                           Text(
-                            "Jealh",
+                            userInfo["username"] == null
+                                ? ""
+                                : userInfo["username"],
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 36),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 36,
+                                color: Colors.black),
                           ),
-                          Text("这是一个签名"),
+                          Text("这是一个字符串"),
                         ],
                       ),
                     ),
@@ -92,9 +117,93 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ),
+          Container(
+            height: 350,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    height: 70,
+                    padding: EdgeInsets.only(left: 20),
+                    margin: EdgeInsets.all(20),
+                    alignment: Alignment.centerLeft,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(color: Colors.grey.shade300, blurRadius: 10)
+                        ],
+                        borderRadius: BorderRadius.circular(20)),
+                    child: ListTile(
+                      leading: CircleIcon(
+                        color: Color(0xffA279D7),
+                        icon: Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                        ),
+                      ),
+                      title: Text("编辑资料"),
+                    ),
+                  ),
+                  Container(
+                    height: 70,
+                    padding: EdgeInsets.only(left: 20),
+                    margin: EdgeInsets.all(20),
+                    alignment: Alignment.centerLeft,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(color: Colors.grey.shade300, blurRadius: 10)
+                        ],
+                        borderRadius: BorderRadius.circular(20)),
+                    child: ListTile(
+                      leading: CircleIcon(
+                        color: Color(0xffA279D7),
+                        icon: Icon(
+                          Icons.person,
+                          color: Colors.white,
+                        ),
+                      ),
+                      onTap: showImgSelectModal,
+                      title: Text("更改头像"),
+                    ),
+                  ),
+                  Container(
+                    height: 70,
+                    padding: EdgeInsets.only(left: 20),
+                    margin: EdgeInsets.all(20),
+                    alignment: Alignment.centerLeft,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(color: Colors.grey.shade300, blurRadius: 10)
+                        ],
+                        borderRadius: BorderRadius.circular(20)),
+                    child: ListTile(
+                      leading: CircleIcon(
+                        color: Color(0xffA279D7),
+                        icon: Icon(
+                          Icons.vpn_key,
+                          color: Colors.white,
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ForgetPassWord()));
+                      },
+                      title: Text("修改密码"),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
           TextButton(
-            onPressed: showImgSelectModal,
-            child: Text("选择文件"),
+            onPressed: () {
+              getUserInfo().then((value) => print(value));
+            },
+            child: Text("sf"),
           ),
         ],
       ),

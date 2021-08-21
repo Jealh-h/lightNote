@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 import 'package:amap_flutter_location/amap_flutter_location.dart';
 import 'package:amap_flutter_location/amap_location_option.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:lightnote/screens/login/login.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 /// 动态申请定位权限
 void requestPermission() async {
@@ -104,6 +106,7 @@ void gaodeGetLocation() {
 Future<void> setUserInfo(Map userInfo) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setString("id", '${userInfo["id"]}');
+  prefs.setString("email", userInfo["email"]);
   prefs.setString("username", userInfo["username"]);
   prefs.setString("avatarUrl", userInfo["avatarUrl"]);
 }
@@ -118,6 +121,7 @@ Future<Map<String, String?>> getUserInfo() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   return {
     "id": prefs.getString("id"),
+    "eamil": prefs.getString("email"),
     "avatarUrl": prefs.getString("avatarUrl"),
     "username": prefs.getString("username"),
   };
@@ -137,9 +141,29 @@ Future<void> signOut(BuildContext context) async {
 
 // 验证邮箱
 matchEmail(String input) {
-  // String regEmail = "^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$";
+  // String regEmail = "^\w+([-+.]\w+)*\w+([-.]\w+)*\.\w+([-.]\w+)*$";
   String regexEmail =
       "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}\$";
   if (input == null || input.isEmpty) return false;
   return new RegExp(regexEmail).hasMatch(input);
+}
+
+// 获得格式化后的时间
+getFormatTime() {
+  DateTime now = DateTime.now();
+  String formattedDate = DateFormat('yyyy/MM/dd–kk:mm').format(now);
+  return formattedDate;
+}
+
+String getRandId() {
+  String alphabet = '0123456789';
+  int strlenght = 9;
+
+  /// 生成的字符串固定长度
+  String left = '';
+  for (var i = 0; i < strlenght; i++) {
+//    right = right + (min + (Random().nextInt(max - min))).toString();
+    left = left + alphabet[Random().nextInt(alphabet.length)];
+  }
+  return left;
 }

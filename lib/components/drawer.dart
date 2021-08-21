@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:lightnote/constants/const.dart';
+import 'package:lightnote/model/user.dart';
 import 'package:lightnote/screens/about/about.dart';
 import 'package:lightnote/screens/forgetPassword/ForgetPassWord.dart';
+import 'package:lightnote/screens/profile/profile.dart';
 import 'package:lightnote/utils/utils.dart';
+import 'package:provider/provider.dart';
 
 class DrawerScreen extends StatefulWidget {
   @override
@@ -12,8 +16,19 @@ class DrawerScreen extends StatefulWidget {
 
 class DrawerScreenState extends State<DrawerScreen> {
   TextStyle textStyle = TextStyle(color: Colors.white, fontSize: 16);
+  Map userInfo = {};
+  @override
+  initState() {
+    super.initState();
+    getUserInfo().then((value) => {
+          setState(() {
+            userInfo = value;
+          })
+        });
+  }
 
   Widget build(BuildContext context) {
+    print(context.read<UserModel>().user);
     return Container(
       color: Colors.black87,
       padding: EdgeInsets.only(top: 50, bottom: 50, left: 20),
@@ -22,53 +37,53 @@ class DrawerScreenState extends State<DrawerScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // 头像、签名、姓名
-          Row(
-            children: [
-              Container(
-                margin: EdgeInsets.only(right: 20),
-                child: ClipOval(
-                  child: Image.asset(
-                    "assets/images/avatar.png",
-                    height: 56,
-                    width: 56,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ProfileScreen()));
+            },
+            child: Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(right: 20),
+                  child: ClipOval(
+                    child: userInfo["id"] == null
+                        ? Image.network(
+                            defaultAvatarUrl,
+                            width: 56,
+                            height: 56,
+                          )
+                        : Image.network(
+                            userInfo["avatarUrl"],
+                            width: 56,
+                            height: 56,
+                          ),
                   ),
                 ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Jealh",
-                    style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white),
-                  ),
-                  Text(
-                    "this is my flutter app",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white54),
-                  )
-                ],
-              )
-            ],
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      userInfo["username"] == null ? "" : userInfo["username"],
+                      style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white),
+                    ),
+                    Text(
+                      "没错，这就是个字符串",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white54),
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
           Column(
             children: [
-              Row(
-                children: [
-                  Icon(
-                    Icons.work,
-                    color: Colors.white,
-                  ),
-                  Text(
-                    " 我的工作空间",
-                    style: textStyle,
-                  ),
-                ],
-              ),
               Row(
                 children: [
                   Icon(
@@ -78,29 +93,7 @@ class DrawerScreenState extends State<DrawerScreen> {
                   TextButton(
                       onPressed: () {},
                       child: Text(
-                        "编辑信息",
-                        style: textStyle,
-                      )),
-                ],
-              ),
-              Row(
-                children: [
-                  Icon(
-                    Icons.vpn_key,
-                    color: Colors.white,
-                  ),
-                  TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ForgetPassWord(),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        "更改密码",
+                        "意见反馈",
                         style: textStyle,
                       )),
                 ],
@@ -128,23 +121,9 @@ class DrawerScreenState extends State<DrawerScreen> {
               ),
             ],
           ),
-          // 设置
+          // 退出登录
           Row(
             children: [
-              Icon(
-                Icons.settings,
-                color: Colors.white,
-              ),
-              Text(
-                "设置",
-                style: textStyle,
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 20),
-                height: 20,
-                width: 5,
-                color: Colors.white,
-              ),
               Icon(
                 Icons.logout,
                 color: Colors.white,

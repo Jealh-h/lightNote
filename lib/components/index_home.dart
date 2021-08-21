@@ -2,11 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:lightnote/constants/const.dart';
+import 'package:lightnote/model/user.dart';
 import 'package:lightnote/screens/bill/bill.dart';
 import 'package:lightnote/screens/note/noteScreen.dart';
 import 'package:lightnote/screens/profile/profile.dart';
 import 'package:lightnote/utils/http.dart';
-// import 'dart:ui';
+import 'package:provider/provider.dart';
 
 import 'package:flutter_weather_bg_null_safety/bg/weather_bg.dart';
 import 'package:lightnote/utils/utils.dart';
@@ -97,9 +98,9 @@ class IndexStateScreen extends State<IndexHome> {
     var week = weekdays[DateTime.now().weekday % 7];
     setState(() {
       if (minute < 10)
-        _time = "${hour}:0${minute}";
+        _time = "$hour:0$minute";
       else
-        _time = "${hour}:${minute}";
+        _time = "$hour:$minute";
       _date = "$month月$day日 $week";
     });
   }
@@ -205,7 +206,7 @@ class IndexStateScreen extends State<IndexHome> {
                     // margin: EdgeInsets.all(20),
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: Colors.black.withAlpha(10),
+                      color: Colors.black.withAlpha(30),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     width: size.width * 0.9,
@@ -223,9 +224,12 @@ class IndexStateScreen extends State<IndexHome> {
                                     text: "Hello，",
                                     style: widget.dateTextStyle),
                                 TextSpan(
-                                  text: "Jealh",
+                                  text: userInfo["username"],
                                   style: TextStyle(
-                                      fontSize: 16, color: Colors.black),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xff171F2B),
+                                      fontFamily: "TangYuan"),
                                 ),
                               ]),
                             ),

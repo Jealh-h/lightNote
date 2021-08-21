@@ -10,9 +10,13 @@ class BillIndex extends StatefulWidget {
 
 class BillIndexState extends State<BillIndex> {
   final textStyle = TextStyle(
-      fontSize: 36, fontWeight: FontWeight.bold, fontFamily: "TangYuan");
+      color: Colors.white,
+      fontSize: 36,
+      fontWeight: FontWeight.bold,
+      fontFamily: "TangYuan");
   final amountTextStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
   final typeTextStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
+  final TextStyle whiteText = TextStyle(color: Colors.white);
   DateTime? _chooseTime;
 
 //  日期选择
@@ -92,48 +96,73 @@ class BillIndexState extends State<BillIndex> {
               // 余额卡片
               Container(
                 margin: EdgeInsets.only(bottom: 30),
-                padding: EdgeInsets.all(15),
-                alignment: Alignment.topLeft,
+                padding: EdgeInsets.symmetric(vertical: 25),
+                // alignment: Alignment.topLeft,
                 width: double.infinity,
                 height: 200,
                 decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xff8B37DE),
+                        Color(0xffCC55D4),
+                        Color(0xffE067AE),
+                        Color(0xffEC7585),
+                        Color(0xffEE8680),
+                        Color(0xffE6B898)
+                      ]),
                   boxShadow: [
                     BoxShadow(
-                        color: Colors.amber.shade800,
+                        color: Color(0xffE6B898),
                         offset: Offset(0, 5),
                         blurRadius: 5,
                         spreadRadius: 0)
                   ],
-                  gradient: LinearGradient(
-                      colors: [Colors.amber, Colors.pink.shade400]),
                   borderRadius: BorderRadius.circular(25),
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      "当前余额:",
+                      "总支出:",
                       style: TextStyle(
                           fontSize: 20,
                           fontFamily: 'TangYuan',
                           fontWeight: FontWeight.bold,
                           color: Colors.white),
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
                     Text.rich(
                       TextSpan(children: [
                         TextSpan(
                             text: "¥",
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold)),
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold)),
                         TextSpan(
                           text: "18.00",
                           style: textStyle,
                         ),
                       ]),
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          "当前月总帐单数:20",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        Text.rich(TextSpan(children: [
+                          TextSpan(text: "收入", style: whiteText),
+                          TextSpan(
+                              text: "2020.00",
+                              style: TextStyle(
+                                  fontSize: 20, color: Colors.amber.shade600)),
+                          TextSpan(text: "元", style: whiteText),
+                        ]))
+                      ],
+                    )
                   ],
                 ),
               ),
@@ -194,9 +223,7 @@ class BillIndexState extends State<BillIndex> {
                       clipBehavior: Clip.antiAlias,
                       semanticContainer: false,
                       child: Container(
-                        // color: Colors.deepPurpleAccent,
                         width: double.infinity,
-                        // height: 200,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,7 +240,17 @@ class BillIndexState extends State<BillIndex> {
                                     "8月15日",
                                     style: typeTextStyle,
                                   ),
-                                  Text("支出20.00"),
+                                  Row(children: [
+                                    Text("出20.00"),
+                                    Container(
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 5),
+                                      height: 20,
+                                      width: 2,
+                                      color: Colors.grey,
+                                    ),
+                                    Text("入0.00")
+                                  ])
                                 ],
                               ),
                             ),
@@ -264,7 +301,6 @@ class BillIndexState extends State<BillIndex> {
                       clipBehavior: Clip.antiAlias,
                       semanticContainer: false,
                       child: Container(
-                        // color: Colors.deepPurpleAccent,
                         width: double.infinity,
                         // height: 200,
                         child: Column(

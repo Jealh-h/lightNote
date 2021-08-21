@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lightnote/constants/const.dart';
+import 'package:lightnote/model/cover.dart';
+import 'package:provider/provider.dart';
 
 class NotebookCoverPicker extends StatefulWidget {
   @override
@@ -9,7 +11,7 @@ class NotebookCoverPicker extends StatefulWidget {
 }
 
 class NotebookCoverPickerState extends State<NotebookCoverPicker> {
-  String selectedNotebooCover = "";
+  String selectedNotebooCover = "assets/images/notebook_cover1.png";
   List<Widget>? NotebookCovers;
   @override
   Widget build(BuildContext context) {
@@ -68,5 +70,6 @@ class NotebookCoverPickerState extends State<NotebookCoverPicker> {
       NotebookCovers;
       selectedNotebooCover = cover;
     });
+    context.read<CoverModel>().setCoverl(cover);
   }
 }

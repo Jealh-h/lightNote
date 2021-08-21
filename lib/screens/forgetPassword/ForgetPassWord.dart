@@ -1,9 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:lightnote/components/circle_button.dart';
 import 'package:lightnote/components/input_container.dart';
 import 'package:lightnote/components/primary_button.dart';
-import 'package:lightnote/components/verifycode_button.dart';
+import 'package:lightnote/components/tail_input_container.dart';
 import 'package:lightnote/constants/const.dart';
 import 'package:lightnote/model/emailUrl.dart';
 import 'package:lightnote/model/uuid.dart';
@@ -13,9 +15,9 @@ import 'package:lightnote/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 class ForgetPassWord extends StatefulWidget {
+  ForgetPassWord({Key? key}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return ForgetPassWordState();
   }
 }
@@ -27,21 +29,32 @@ class ForgetPassWordState extends State<ForgetPassWord> {
   final TextEditingController passController = TextEditingController();
   final TextEditingController confirmController = TextEditingController();
   final TextEditingController codeController = TextEditingController();
+  Map _result = {};
+  int remainTime = 60;
+  bool isTouched = false;
+  Timer? _timer;
 
   @override
   void initState() {
     super.initState();
+    isTouched = false;
+    _timer?.cancel();
+    _timer = null;
+    _result = {};
     Future.delayed(Duration.zero, () {
-      panels = [
-        buildVerifyEmail(),
-        buildModifyPassWord(),
-        RetrieveResult(),
-      ];
       setState(() {
-        panels;
+        panels = [
+          buildVerifyEmail(),
+          RetrieveResult(),
+        ];
         currentStep = 1;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   // 构建指示器
@@ -72,6 +85,18 @@ class ForgetPassWordState extends State<ForgetPassWord> {
     Size size = MediaQuery.of(context).size;
     return Column(
       children: [
+        InputContainer(
+          controller: passController,
+          icon: Icons.vpn_key,
+          hintText: "请输入新密码",
+          onChanged: (string) {},
+        ),
+        TailInputContainer(
+          controller: confirmController,
+          icon: Icons.vpn_key,
+          hintText: "请确认新密码",
+          onChanged: (string) {},
+        ),
         // 邮箱输入框
         InputContainer(
           controller: mailController,
@@ -107,33 +132,23 @@ class ForgetPassWordState extends State<ForgetPassWord> {
               ),
               Spacer(),
               // 获取验证码
-              VerifyCodeButton()
+              GestureDetector(
+                onTap: () {
+                  handleEnableTouch();
+                },
+                child: Container(
+                  width: 100,
+                  height: 50,
+                  decoration: BoxDecoration(
+                      color:
+                          isTouched ? Colors.grey.shade400 : Colors.amber[900],
+                      borderRadius: BorderRadius.circular(5)),
+                  alignment: Alignment.center,
+                  child: Text("${isTouched ? '${remainTime}s' : '获取验证码'}"),
+                ),
+              ),
             ],
           ),
-        ),
-        SizedBox(
-          height: size.height * 0.1,
-        ),
-      ],
-    );
-  }
-
-  // 修改新密码
-  Widget buildModifyPassWord() {
-    Size size = MediaQuery.of(context).size;
-    return Column(
-      children: [
-        InputContainer(
-          controller: passController,
-          icon: Icons.vpn_key,
-          hintText: "请输入新密码",
-          onChanged: (string) {},
-        ),
-        InputContainer(
-          controller: confirmController,
-          icon: Icons.vpn_key,
-          hintText: "请确认新密码",
-          onChanged: (string) {},
         ),
         SizedBox(
           height: size.height * 0.1,
@@ -145,19 +160,33 @@ class ForgetPassWordState extends State<ForgetPassWord> {
   // 找回结果
   Widget RetrieveResult() {
     Size size = MediaQuery.of(context).size;
-    return Column(
-      children: [
-        Image.asset(
-          "assets/images/success.png",
-          width: 128,
-          height: 128,
-        ),
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 20),
-          child: Text("找回成功，确认登录"),
-        ),
-      ],
-    );
+    return _result["status"] == "success"
+        ? Column(
+            children: [
+              Image.asset(
+                "assets/images/success.png",
+                width: 128,
+                height: 128,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 20),
+                child: Text("${_result["data"]}"),
+              ),
+            ],
+          )
+        : Column(
+            children: [
+              Image.asset(
+                "assets/images/fail.png",
+                width: 128,
+                height: 128,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 20),
+                child: Text("${_result["data"]}"),
+              ),
+            ],
+          );
   }
 
   @override
@@ -175,10 +204,6 @@ class ForgetPassWordState extends State<ForgetPassWord> {
               ),
               press: () {
                 Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Index()),
-                );
               },
               backgroundColor: Colors.transparent)),
       body: Container(
@@ -191,21 +216,14 @@ class ForgetPassWordState extends State<ForgetPassWord> {
                 width: size.width * 0.8,
                 child: Row(
                   children: [
-                    buildIndicator("确认邮箱", 1),
+                    buildIndicator("修改新密码", 1),
                     Expanded(
                       child: Divider(
                         color: Colors.black,
                         height: 1.5,
                       ),
                     ),
-                    buildIndicator("修改新密码", 2),
-                    Expanded(
-                      child: Divider(
-                        color: Colors.black,
-                        height: 1.5,
-                      ),
-                    ),
-                    buildIndicator("找回结果", 3)
+                    buildIndicator("找回结果", 2)
                   ],
                 ),
               ),
@@ -221,7 +239,7 @@ class ForgetPassWordState extends State<ForgetPassWord> {
                 width: size.width * 0.8,
                 child: PrimaryButton(
                   color: Colors.amber[900],
-                  text: currentStep == 3 ? "完成" : "下一步",
+                  text: currentStep == 2 ? "完成" : "下一步",
                   press: () {
                     handleNextStep();
                   },
@@ -234,47 +252,104 @@ class ForgetPassWordState extends State<ForgetPassWord> {
     );
   }
 
-  handleNextStep() {
+  handleNextStep() async {
     switch (currentStep) {
       case 1:
         {
-          // 邮件不合理
-          if (!matchEmail(mailController.text)) {
-            EasyLoading.showError("请输入正确邮件信息");
-          } else if (codeController.text == null ||
-              codeController.text.isEmpty) {
-            EasyLoading.showError("请输入验证码");
+          String password = passController.text;
+          String confirmPass = confirmController.text;
+          if (codeController.text.isEmpty ||
+              password.isEmpty ||
+              confirmPass.isEmpty ||
+              mailController.text.isEmpty) {
+            EasyLoading.showInfo("请验证信息完整");
+          } else if (password != confirmPass) {
+            EasyLoading.showError("请确认密码一致");
+          } else if (!matchEmail(mailController.text)) {
+            EasyLoading.showError("请确认邮箱格式");
           } else {
-            httpPost(uri: baseUrl + "/api/verifycode", param: {
+            EasyLoading.show(status: "校验中");
+            var result =
+                await httpPost(uri: baseUrl + "/api/modifypassword", param: {
+              "password": password,
+              "email": mailController.text,
               "uuid": context.read<UUidModel>().uuid,
-              "vcode": codeController.text
+              "Vcode": codeController.text
             });
+            print(result);
+            if (result["status"] == "success") {
+              EasyLoading.dismiss();
+              print(result);
+              // 验证成功后清空uuid
+              context.read<UUidModel>().setUUid("");
+              setState(() {
+                _result = result;
+                currentStep = currentStep + 1;
+                panels = [
+                  buildVerifyEmail(),
+                  RetrieveResult(),
+                ];
+              });
+            } else {
+              EasyLoading.showInfo(result["data"]);
+            }
           }
-
-          print(currentStep);
-          int a = 3;
         }
         break;
       case 2:
         {
-          print(currentStep + 1);
-          int a = 3;
-        }
-        break;
-      case 3:
-        {
-          print(currentStep + 2);
-          int a = 3;
+          Navigator.pop(context);
         }
         break;
       default:
         break;
     }
+  }
 
-    if (currentStep < 3) {
-      setState(() {
-        currentStep++;
-      });
+  // 发送邮件
+  sendEmail() async {
+    var result = await httpPost(
+        uri: baseUrl + "/api/sendcode",
+        param: {"email": context.read<EmailModel>().email});
+    print("res:$result");
+    if (result["status"] == "success") {
+      print(result["data"]["uuid"]);
+      // 获取成功设置uuid
+      context.read<UUidModel>().setUUid(result["data"]["uuid"]);
+      context.read<EmailModel>().setEmail("");
+      EasyLoading.showSuccess("发送成功，请注意查收邮件");
+    }
+  }
+
+  handleEnableTouch() {
+    if (!matchEmail(context.read<EmailModel>().email)) {
+      EasyLoading.showInfo("请输入正确邮件信息");
+      return;
+    } else {
+      if (!isTouched) {
+        isTouched = true;
+        // 启动定时器
+        Timer.periodic(Duration(seconds: 1), (timer) {
+          if (remainTime < 1 || currentStep == 2) {
+            timer.cancel();
+            isTouched = false;
+            remainTime = 60;
+          }
+          print(remainTime);
+          if (mounted) {
+            setState(() {
+              remainTime = remainTime - 1;
+              panels = [
+                buildVerifyEmail(),
+                RetrieveResult(),
+              ];
+            });
+          }
+        });
+        sendEmail();
+      } else {
+        return;
+      }
     }
   }
 }

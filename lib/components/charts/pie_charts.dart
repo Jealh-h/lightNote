@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
+
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 class PieChartScreen extends StatefulWidget {
   @override
@@ -14,7 +13,6 @@ class PieChartScreenState extends State<PieChartScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     _data = getData();
     super.initState();
   }

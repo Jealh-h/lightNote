@@ -1,21 +1,16 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:lightnote/components/verifycode_button.dart';
+import 'package:lightnote/model/cover.dart';
 import 'package:lightnote/model/emailUrl.dart';
+import 'package:lightnote/model/user.dart';
 import 'package:lightnote/model/uuid.dart';
 import 'package:lightnote/screens/index/index.dart';
 import 'package:lightnote/screens/login/login.dart';
 import 'package:lightnote/screens/note/noteScreen.dart';
-import 'package:lightnote/screens/test/test.dart';
 import 'package:lightnote/utils/utils.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'components/primary_button.dart';
-import 'constant.dart';
 
 void main() {
   runApp(
@@ -23,6 +18,8 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (BuildContext context) => EmailModel()),
         ChangeNotifierProvider(create: (BuildContext context) => UUidModel()),
+        ChangeNotifierProvider(create: (BuildContext context) => UserModel()),
+        ChangeNotifierProvider(create: (BuildContext context) => CoverModel()),
       ],
       child: MyApp(),
     ),
@@ -67,6 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     });
     getUserInfo().then((Map userinfo) {
+      // context.read<UserModel>().setUserInfo(userinfo);
       setState(() {
         userInfo = userinfo;
       });
@@ -81,7 +79,6 @@ class _MyHomePageState extends State<MyHomePage> {
         child: userInfo["id"] == null ? LoginScreen() : Index(),
       ),
       // child: Test(),
-      // child: VerifyCodeButton(),
     );
   }
 }

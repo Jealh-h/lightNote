@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:io';
 import 'dart:math';
 import 'package:amap_flutter_location/amap_flutter_location.dart';
@@ -166,4 +167,10 @@ String getRandId() {
     left = left + alphabet[Random().nextInt(alphabet.length)];
   }
   return left;
+}
+
+formmatedNum(String num) {
+  // return double.toStringfIXED
+  var count = double.parse(num);
+  return count.toStringAsFixed(2);
 }

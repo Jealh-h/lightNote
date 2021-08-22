@@ -98,23 +98,11 @@ var noteBookCover = [
   "assets/images/notebook_cover7.png",
 ];
 
-const consumptionType = [
-  {
-    "name": "服饰",
-    "icon": Icon(Icons.local_mall),
-  },
-  {
-    "name": "餐饮",
-    "icon": Icon(Icons.fastfood),
-  },
-  {
-    "name": "交通",
-    "icon": Icon(Icons.directions_car),
-  },
-  {
-    "name": "其他",
-    "icon": Icon(Icons.error_outline),
-  }
+const consumptionType = <Map<String, dynamic>>[
+  {"name": "服饰", "icon": Icons.local_mall, "index": 0},
+  {"name": "餐饮", "icon": Icons.fastfood, "index": 1},
+  {"name": "交通", "icon": Icons.directions_car, "index": 2},
+  {"name": "其他", "icon": Icons.error_outline, "index": 3}
 ];
 
 const baseUrl = "http://10.0.2.2:7001";

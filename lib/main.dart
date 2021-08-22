@@ -12,6 +12,8 @@ import 'package:lightnote/screens/note/noteScreen.dart';
 import 'package:lightnote/utils/utils.dart';
 import 'package:provider/provider.dart';
 
+import 'model/consumption.dart';
+
 void main() {
   runApp(
     MultiProvider(
@@ -20,6 +22,8 @@ void main() {
         ChangeNotifierProvider(create: (BuildContext context) => UUidModel()),
         ChangeNotifierProvider(create: (BuildContext context) => UserModel()),
         ChangeNotifierProvider(create: (BuildContext context) => CoverModel()),
+        ChangeNotifierProvider(
+            create: (BuildContext context) => ComsumptionModel()),
       ],
       child: MyApp(),
     ),

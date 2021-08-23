@@ -35,9 +35,13 @@ httpsGet(String authority, String unencodedPath,
 }
 
 httpPost({Map<String, dynamic>? param, required String uri}) async {
-  var url = Uri.parse(uri);
-  var response = await http.post(url, body: param);
-  return convert.jsonDecode(response.body) as Map<String, dynamic>;
+  try {
+    var url = Uri.parse(uri);
+    var response = await http.post(url, body: param);
+    return convert.jsonDecode(response.body) as Map<String, dynamic>;
+  } catch (e) {
+    print(e);
+  }
 }
 
 dioUploadFile(XFile f) async {

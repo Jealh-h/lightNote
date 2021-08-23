@@ -136,6 +136,7 @@ class BillIndexState extends State<BillIndex> {
         });
       }
     } catch (e) {
+      print(e);
       if (mounted) {
         setState(() {
           loading = false;
@@ -272,7 +273,7 @@ class BillIndexState extends State<BillIndex> {
                               ],
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                     // 账单

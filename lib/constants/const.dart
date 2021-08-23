@@ -105,7 +105,7 @@ const consumptionType = <Map<String, dynamic>>[
   {"name": "其他", "icon": Icons.error_outline, "index": 3}
 ];
 
-const baseUrl = "http://10.0.2.2:7001";
+const baseUrl = "http://47.99.199.187:7001";
 
 const defaultAvatarUrl = "http://47.99.199.187/images/default_avatar.jpg";
 

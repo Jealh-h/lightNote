@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class CircleIcon extends StatelessWidget {
-  CircleIcon({Key? key, required Color this.color, required Icon this.icon})
+  CircleIcon({Key? key, required this.color, required this.icon})
       : super(key: key);
   Color color;
   Icon icon;

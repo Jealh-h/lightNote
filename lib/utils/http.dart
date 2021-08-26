@@ -1,10 +1,12 @@
 import 'dart:convert' as convert;
-import 'dart:io';
+import 'dart:developer';
+import 'dart:typed_data';
 import 'package:dio/dio.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:lightnote/constants/const.dart';
+import 'package:lightnote/utils/utils.dart';
 
 httpGet(String authority, String unencodedPath,
     [Map<String, dynamic>? queryParameters]) async {
@@ -44,7 +46,8 @@ httpPost({Map<String, dynamic>? param, required String uri}) async {
   }
 }
 
-dioUploadFile(XFile f) async {
+// 通过选择好的文件上传
+dioUploadFile(XFile f, Map userInfo) async {
   var dio = Dio();
   String path = f.path;
   var name = path.substring(path.lastIndexOf("/") + 1, path.length);
@@ -54,8 +57,28 @@ dioUploadFile(XFile f) async {
     "file": await MultipartFile.fromFile(path, filename: name)
   });
   try {
-    var response = await dio.post(baseUrl + '/api/upload', data: formData);
-    print(response);
-    // var response = await dio.post(baseUrl + '/api/upload', data: {"id": 2});
+    var response =
+        await dio.post<String>(baseUrl + '/api/upload', data: formData);
+    return convert.jsonDecode(response.toString()) as Map<String, dynamic>;
   } catch (e) {}
+}
+
+// 以字节流上传文件
+dioUploadFileByByte(List<int> bytes, Map info) async {
+  var dio = Dio();
+  // var suffix = name.substring(name.lastIndexOf(".") + 1, name.length);
+  var formData = new FormData.fromMap({
+    ...info,
+    "file": MultipartFile.fromBytes(bytes,
+        filename: "${info["bid"]}-${getRandId()}}.jpg")
+  });
+  try {
+    var response =
+        await dio.post<String>(baseUrl + '/api/addnote', data: formData);
+    return convert.jsonDecode(response.toString()) as Map<String, dynamic>;
+    // return convert.jsonDecode(response.body) as Map<String, dynamic>;
+    // var response = await dio.post(baseUrl + '/api/upload', data: {"id": 2});
+  } catch (e) {
+    print(e);
+  }
 }

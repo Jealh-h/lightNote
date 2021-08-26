@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class LineChartScreen extends StatefulWidget {
   LineChartScreen(this.data);
   Map data = {"income": FlSpot(0, 0), "outcome": FlSpot(0, 0)};
@@ -145,32 +146,31 @@ class _LineChartScreenState extends State<LineChartScreen> {
         ),
         leftTitles: SideTitles(
           showTitles: true,
+          interval: 50,
+          // checkToShowTitle: (min, max, sideTitles, applyedInterval, v) {
+          //   if (v == max || v == min)
+          //     return true;
+          //   else if (v == 500) {
+          //     return true;
+          //   } else if (v == 1000) {
+          //     return true;
+          //   } else if (v == 1600) {
+          //     return true;
+          //   } else if (v == 5200) {
+          //     return true;
+          //   } else if (v == 12000) {
+          //     return true;
+          //   } else if (v == 24000) {
+          //     return true;
+          //   }
+          //   return false;
+          // },
+
           getTextStyles: (value) => const TextStyle(
             color: Color(0xff67727d),
             fontWeight: FontWeight.bold,
             fontSize: 15,
           ),
-          getTitles: (value) {
-            int v = value.toInt();
-            if (v >= 80 && v <= 100) {
-              return "0.1k";
-            } else if (v >= 450 && v <= 500) {
-              return "0.5k";
-            } else if (v >= 900 && v <= 1000) {
-              return "1k";
-            } else if (v >= 1450 && v <= 1600) {
-              return "1.5k";
-            } else if (v >= 4800 && v <= 5200) {
-              return "5k";
-            } else if (v >= 10000 && v <= 12000) {
-              return "10k";
-            } else if (v >= 20000 && v <= 24000) {
-              return "22k";
-            } else if (v == 0) {
-              return "0";
-            }
-            return "";
-          },
           reservedSize: 28,
           margin: 12,
         ),
@@ -186,6 +186,7 @@ class _LineChartScreenState extends State<LineChartScreen> {
       lineBarsData: [
         // 收入
         LineChartBarData(
+          show: true,
           spots: widget.data["income"] == null
               ? [FlSpot(0, 0)]
               : widget.data["income"]
@@ -196,9 +197,9 @@ class _LineChartScreenState extends State<LineChartScreen> {
                     ),
                   )
                   .toList(),
-          isCurved: true,
+          isCurved: false,
           colors: incomeColors,
-          barWidth: 5,
+          barWidth: 10,
           isStrokeCapRound: true,
           dotData: FlDotData(
             show: false,
@@ -222,8 +223,10 @@ class _LineChartScreenState extends State<LineChartScreen> {
                   )
                   .toList(),
           isCurved: true,
+          // curveSmoothness: 0.1,
+          preventCurveOverShooting: true,
           colors: outcomeColors,
-          barWidth: 5,
+          barWidth: 10,
           isStrokeCapRound: true,
           dotData: FlDotData(
             show: false,

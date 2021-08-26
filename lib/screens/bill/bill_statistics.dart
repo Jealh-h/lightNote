@@ -1,11 +1,8 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:lightnote/components/charts/bar_charts.dart';
 import 'package:lightnote/components/charts/fl_pie_chart.dart';
 import 'package:lightnote/components/charts/line_chart.dart';
 import 'package:lightnote/components/charts/pie_charts.dart';
-import 'package:lightnote/components/date_picker.dart';
 import 'package:lightnote/constants/const.dart';
 import 'package:lightnote/utils/http.dart';
 
@@ -44,7 +41,9 @@ class _StatisticScreenState extends State<StatisticScreen> {
     });
     var cirResult = await httpPost(
         uri: baseUrl + "/api/getcircledata", param: {"year": "$currentYear"});
-    if (result['status'] == 'success' && cirResult["status"] == "success") {
+    if (result['status'] == 'success' &&
+        cirResult["status"] == "success" &&
+        mounted) {
       setState(() {
         _data["income"] = result["data"]["income"];
         _data["outcome"] = result["data"]["outcome"];

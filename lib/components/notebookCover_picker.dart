@@ -12,6 +12,7 @@ class NotebookCoverPicker extends StatefulWidget {
 
 class NotebookCoverPickerState extends State<NotebookCoverPicker> {
   String selectedNotebooCover = "assets/images/notebook_cover1.png";
+  // ignore: non_constant_identifier_names
   List<Widget>? NotebookCovers;
   @override
   Widget build(BuildContext context) {

@@ -14,7 +14,6 @@ class PieChartFl extends StatefulWidget {
 class _PieChartState extends State<PieChartFl> {
   @override
   void initState() {
-    // TODO: implement initState
     getWeekData();
     super.initState();
   }
@@ -45,7 +44,6 @@ class _PieChartState extends State<PieChartFl> {
               result["data"][length - 1]["day"].toString();
         });
       }
-      ;
     } else {
       EasyLoading.showError(result["data"]);
     }

@@ -45,6 +45,7 @@ class BillIndexState extends State<BillIndex> {
             updateDate();
           })
         });
+    super.initState();
   }
 
 //  日期选择
@@ -283,7 +284,6 @@ class BillIndexState extends State<BillIndex> {
                       padding: EdgeInsets.symmetric(vertical: 10),
                       child: ListView(
                         padding: EdgeInsets.only(bottom: 30),
-                        //  TODO 添加列表
                         children: _buildBillListPanel(),
                       ),
                     ),
@@ -382,8 +382,7 @@ class BillIndexState extends State<BillIndex> {
                       DateTime.now().minute.toString(),
                   "value": "${amountController.text}"
                 };
-                if (amountController.text == "" ||
-                    amountController.text == null) {
+                if (amountController.text == "") {
                   EasyLoading.showToast("请输入具体金额",
                       toastPosition: EasyLoadingToastPosition.center);
                 } else {
@@ -392,6 +391,7 @@ class BillIndexState extends State<BillIndex> {
                   // 添加成功
                   if (result["status"] == "success") {
                     EasyLoading.showSuccess(result["data"]);
+                    updateDate();
                     Navigator.pop(context);
                   }
                   // 添加失败

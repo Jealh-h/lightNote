@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:ffi';
-import 'dart:io';
 import 'dart:math';
 import 'package:amap_flutter_location/amap_flutter_location.dart';
 import 'package:amap_flutter_location/amap_location_option.dart';
@@ -110,12 +108,13 @@ Future<void> setUserInfo(Map userInfo) async {
   prefs.setString("email", userInfo["email"]);
   prefs.setString("username", userInfo["username"]);
   prefs.setString("avatarUrl", userInfo["avatarUrl"]);
+  prefs.setString("signature", userInfo["signature"]);
 }
-
-/**
- * SP方法介绍
- * remover(key),移除像关键，调用get会返回null
- */
+//
+// /**
+//  * SP方法介绍
+//  * remover(key),移除像关键，调用get会返回null
+//  */
 
 // 从sharedpreference中获取用户信息
 Future<Map<String, String?>> getUserInfo() async {
@@ -125,6 +124,7 @@ Future<Map<String, String?>> getUserInfo() async {
     "eamil": prefs.getString("email"),
     "avatarUrl": prefs.getString("avatarUrl"),
     "username": prefs.getString("username"),
+    "signature": prefs.getString("signature")
   };
 }
 
@@ -145,7 +145,7 @@ matchEmail(String input) {
   // String regEmail = "^\w+([-+.]\w+)*\w+([-.]\w+)*\.\w+([-.]\w+)*$";
   String regexEmail =
       "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}\$";
-  if (input == null || input.isEmpty) return false;
+  if (input.isEmpty) return false;
   return new RegExp(regexEmail).hasMatch(input);
 }
 

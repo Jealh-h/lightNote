@@ -58,7 +58,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Map userInfo = {};
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     // 添加提示框监听
     EasyLoading.addStatusCallback((status) {
@@ -77,7 +76,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
         child: userInfo["id"] == null ? LoginScreen() : Index(),

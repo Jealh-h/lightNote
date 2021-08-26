@@ -1,6 +1,5 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:lightnote/components/charts/bar_charts.dart';
+
 import 'package:lightnote/components/circle_button.dart';
 import 'package:lightnote/screens/bill/bill_index.dart';
 import 'package:lightnote/screens/bill/bill_statistics.dart';

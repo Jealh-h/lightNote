@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lightnote/constants/const.dart';
 import 'package:lightnote/model/user.dart';
 import 'package:lightnote/screens/about/about.dart';
-import 'package:lightnote/screens/forgetPassword/ForgetPassWord.dart';
 import 'package:lightnote/screens/profile/profile.dart';
 import 'package:lightnote/utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -71,7 +70,10 @@ class DrawerScreenState extends State<DrawerScreen> {
                           color: Colors.white),
                     ),
                     Text(
-                      "没错，这就是个字符串",
+                      "${userInfo["signature"]}",
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
+                      maxLines: 1,
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,

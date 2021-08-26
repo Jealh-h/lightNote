@@ -2,16 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:lightnote/constants/const.dart';
-import 'package:lightnote/model/user.dart';
 import 'package:lightnote/screens/bill/bill.dart';
 import 'package:lightnote/screens/note/noteScreen.dart';
 import 'package:lightnote/screens/profile/profile.dart';
 import 'package:lightnote/utils/http.dart';
-import 'package:provider/provider.dart';
 
 import 'package:flutter_weather_bg_null_safety/bg/weather_bg.dart';
 import 'package:lightnote/utils/utils.dart';
 
+// ignore: must_be_immutable
 class IndexHome extends StatefulWidget {
   TextStyle dateTextStyle = TextStyle(
     fontSize: 24,
@@ -57,11 +56,13 @@ class IndexStateScreen extends State<IndexHome> {
     ]
   };
   @override
+  // ignore: must_call_super
   void initState() {
     getWeather();
     setTimer();
     getUserInfo().then((value) => {
           setState(() {
+            // ignore: unnecessary_statements
             weatherInfo;
             userInfo = value;
           })

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lightnote/constants/const.dart';
-import 'package:lightnote/utils/http.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+// ignore: must_be_immutable
 class PieChartScreen extends StatefulWidget {
   PieChartScreen(this.data, this.time);
   Map data;
@@ -15,6 +15,7 @@ class PieChartScreen extends StatefulWidget {
 
 class PieChartScreenState extends State<PieChartScreen> {
   int touchedIndex = -1;
+  // ignore: unused_field
   late List<ConsumptionData> _data;
 
   @override

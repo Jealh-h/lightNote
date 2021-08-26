@@ -133,7 +133,7 @@ class NoteScreenState extends State<NoteScreen> {
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'BaoTuXiaoBai'),
-            )
+            ),
           ],
         ),
       );
@@ -151,8 +151,12 @@ class NoteScreenState extends State<NoteScreen> {
             .map(
               (e) => GestureDetector(
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => NoteList()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NoteList(
+                                notebookInfo: e,
+                              )));
                 },
                 child: Container(
                   decoration: BoxDecoration(

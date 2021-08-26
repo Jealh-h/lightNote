@@ -33,7 +33,7 @@ class _TestState extends State<Test> {
     if (image != null) {
       print(image.name);
       print(image.path);
-      dioUploadFile(image);
+      // dioUploadFile(image);
     }
 
     // print(await image?.);

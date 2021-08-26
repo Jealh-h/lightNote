@@ -14,15 +14,16 @@ class _TimePickerState extends State<TimePicker> {
 
   @override
   void initState() {
-    // TODO: implement initState
     if (mounted) {
       setState(() {
         _time = DateTime.now();
       });
     }
+    super.initState();
   }
 
   @override
+  // ignore: must_call_super
   void didChangeDependencies() {
     WidgetsBinding.instance?.addPostFrameCallback(
         (_) => context.read<ComsumptionModel>().setTime(_time));

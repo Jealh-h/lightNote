@@ -9,7 +9,6 @@ import 'package:lightnote/components/tail_input_container.dart';
 import 'package:lightnote/constants/const.dart';
 import 'package:lightnote/model/emailUrl.dart';
 import 'package:lightnote/model/uuid.dart';
-import 'package:lightnote/screens/index/index.dart';
 import 'package:lightnote/utils/http.dart';
 import 'package:lightnote/utils/utils.dart';
 import 'package:provider/provider.dart';

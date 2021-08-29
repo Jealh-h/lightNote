@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:lightnote/constants/const.dart';
 import 'package:lightnote/model/user.dart';
@@ -27,7 +28,6 @@ class DrawerScreenState extends State<DrawerScreen> {
   }
 
   Widget build(BuildContext context) {
-    print(context.read<UserModel>().user);
     return Container(
       color: Colors.black87,
       padding: EdgeInsets.only(top: 50, bottom: 50, left: 20),
@@ -93,7 +93,12 @@ class DrawerScreenState extends State<DrawerScreen> {
                     color: Colors.white,
                   ),
                   TextButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        var dio = Dio();
+                        var res = await dio.get(
+                            "https://120.77.134.169:443/v3/weather/weatherInfo?key=25d3dafaaf101d84a39d5670e2d74d2f&city=110101");
+                        print(res);
+                      },
                       child: Text(
                         "意见反馈",
                         style: textStyle,

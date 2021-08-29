@@ -7,4 +7,11 @@ class EmailModel with ChangeNotifier {
     _email = email;
     notifyListeners();
   }
+
+  int _fontsize = 10;
+  int get fontsize => _fontsize;
+  void setSize(int size) {
+    _fontsize = size;
+    notifyListeners();
+  }
 }

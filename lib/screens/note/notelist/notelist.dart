@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lightnote/constant.dart';
 import 'package:lightnote/constants/const.dart';
 import 'package:lightnote/screens/note/write_note.dart/writenote.dart';
@@ -26,14 +28,20 @@ class _NoteListState extends State<NoteList> {
   }
 
   getNoteList() async {
+    setState(() {
+      loading = true;
+    });
     var result = await httpPost(uri: baseUrl + "/api/getnotelist", param: {
       "userid": "${widget.notebookInfo["userid"]}",
       "bid": "${widget.notebookInfo["bid"]}",
     });
-    setState(() {
-      noteArr = result["data"];
-      loading = false;
-    });
+    print(result);
+    if (result["status"] == "success" && mounted) {
+      setState(() {
+        noteArr = result["data"];
+        loading = false;
+      });
+    }
   }
 
   @override
@@ -53,10 +61,16 @@ class _NoteListState extends State<NoteList> {
             MaterialPageRoute(
               builder: (context) => WriteNote(
                 height: size.height,
+                opr: "add",
                 notebookInfo: widget.notebookInfo,
               ),
             ),
-          );
+          ).then((value) async {
+            if (value) {
+              print(value);
+              await getNoteList();
+            }
+          });
         },
         backgroundColor: IconColor,
         child: Icon(Icons.add),
@@ -119,28 +133,64 @@ class _NoteListState extends State<NoteList> {
     return ListView.builder(
         itemCount: noteArr.length,
         itemBuilder: (BuildContext context, int index) {
-          return ListTile(
-            onTap: () {
-              Navigator.push(
+          return Slidable(
+            child: ListTile(
+              onTap: () {
+                Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => WriteNote(
-                            height: MediaQuery.of(context).size.height,
-                            notebookInfo: widget.notebookInfo,
-                            noteInfo: noteArr[index],
-                          )));
-            },
-            isThreeLine: true,
-            leading: Image.network(
-              noteArr[index]["imageUrl"],
-              width: 64,
-              height: 64,
-              fit: BoxFit.fill,
+                    builder: (context) => WriteNote(
+                      height: MediaQuery.of(context).size.height,
+                      notebookInfo: widget.notebookInfo,
+                      opr: "modify",
+                      noteInfo: noteArr[index],
+                    ),
+                  ),
+                ).then((value) async {
+                  if (value) {
+                    getNoteList();
+                  }
+                });
+              },
+              isThreeLine: true,
+              leading: Image.network(
+                noteArr[index]["imageUrl"],
+                width: 64,
+                height: 64,
+                fit: BoxFit.fill,
+              ),
+              minLeadingWidth: 64,
+              // shape: Border(bottom: BorderSide()),
+              title: Text("${noteArr[index]["title"]}"),
+              subtitle: Text("${noteArr[index]["time"]}"),
+              trailing: Icon(Icons.arrow_forward_ios),
             ),
-            // shape: Border(bottom: BorderSide()),
-            title: Text("${noteArr[index]["title"]}"),
-            subtitle: Text("${noteArr[index]["time"]}"),
-            trailing: Icon(Icons.arrow_forward_ios),
+            secondaryActions: [
+              IconSlideAction(
+                caption: '删除',
+                color: Colors.red,
+                icon: Icons.delete_forever,
+                onTap: () async {
+                  EasyLoading.show();
+                  var result =
+                      await httpPost(uri: baseUrl + '/api/deletenote', param: {
+                    "userid": "${noteArr[index]["userid"]}",
+                    "bid": "${noteArr[index]["bid"]}",
+                    "noteid": "${noteArr[index]["noteid"]}",
+                  });
+                  print(result);
+                  EasyLoading.dismiss();
+                  if (result["status"] == "success") {
+                    setState(() {
+                      noteArr = result["data"];
+                    });
+                  } else {
+                    EasyLoading.showError(result["data"]);
+                  }
+                },
+              )
+            ],
+            actionPane: SlidableScrollActionPane(),
           );
         });
   }

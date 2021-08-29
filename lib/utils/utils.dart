@@ -174,3 +174,35 @@ formmatedNum(String num) {
   var count = double.parse(num);
   return count.toStringAsFixed(2);
 }
+
+// 显示底部图片选择框
+void showImgSelectModal(BuildContext context,
+    void Function()? selectImgByCamera, void Function()? selectImgByGallery) {
+  showCupertinoModalPopup(
+    context: context,
+    builder: (context) {
+      return Container(
+        width: double.infinity,
+        height: 200,
+        padding: EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 0),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            )),
+        child: Column(
+          children: [
+            CupertinoButton(child: Text("相机"), onPressed: selectImgByCamera),
+            CupertinoButton(child: Text("图库"), onPressed: selectImgByGallery),
+            CupertinoButton(
+                child: Text("取消"),
+                onPressed: () {
+                  Navigator.pop(context);
+                }),
+          ],
+        ),
+      );
+    },
+  );
+}

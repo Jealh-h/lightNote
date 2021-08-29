@@ -30,8 +30,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     getUserInfo().then((value) => {
           setState(() {
             userInfo = value;
-            name.text = value["name"]!;
-            signature.text = value["signature"]!;
+            name.text = value["username"] ?? "";
+            signature.text = value["signature"] ?? "";
           })
         });
     super.initState();
@@ -41,207 +41,227 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      // appBar
-      appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.white,
-          leadingWidth: 40,
-          leading: CircleButton(
-              icon: Icon(
-                Icons.arrow_back_ios_new,
-                color: Colors.black,
+        // appBar
+        appBar: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.white,
+            leadingWidth: 40,
+            leading: CircleButton(
+                icon: Icon(
+                  Icons.arrow_back_ios_new,
+                  color: Colors.black,
+                ),
+                press: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Index()),
+                  );
+                },
+                backgroundColor: Colors.transparent)),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              // 头像banner
+              AspectRatio(
+                aspectRatio: 1.6,
+                child: Card(
+                  margin: EdgeInsets.all(0),
+                  elevation: 0,
+                  child: Container(
+                    // margin: ,
+                    width: size.width,
+                    // color: Colors.red,
+                    child: Stack(
+                      children: [
+                        // 头像
+                        Positioned(
+                          width: size.width,
+                          top: size.width / 1.2 * 0.1,
+                          child: Column(
+                            children: [
+                              // 头像
+                              Container(
+                                padding: EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(64),
+                                    border: Border.all(
+                                        width: 5, color: Colors.blue)),
+                                child: ClipOval(
+                                  child: userInfo["id"] == null
+                                      ? Image.network(
+                                          defaultAvatarUrl,
+                                          width: 64,
+                                          height: 64,
+                                        )
+                                      : Image.network(
+                                          userInfo["avatarUrl"],
+                                          width: 64,
+                                          height: 64,
+                                        ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                userInfo["username"] == null
+                                    ? ""
+                                    : userInfo["username"],
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 36,
+                                    color: Colors.black),
+                              ),
+                              Text("${userInfo["signature"]}"),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-              press: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Index()),
-                );
-              },
-              backgroundColor: Colors.transparent)),
-      body: Column(
-        children: [
-          AspectRatio(
-            aspectRatio: 1.4,
-            child: Card(
-              margin: EdgeInsets.all(0),
-              elevation: 0,
-              child: Container(
-                // margin: ,
-                width: size.width,
-                // color: Colors.red,
-                child: Stack(
+              Container(
+                height: 350,
+                child: Column(
                   children: [
-                    // 头像
-                    Positioned(
-                      width: size.width,
-                      top: size.width / 1.2 * 0.1,
-                      child: Column(
-                        children: [
-                          // 头像
-                          Container(
-                            padding: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(64),
-                                border:
-                                    Border.all(width: 5, color: Colors.blue)),
-                            child: ClipOval(
-                              child: userInfo["id"] == null
-                                  ? Image.network(
-                                      defaultAvatarUrl,
-                                      width: 64,
-                                      height: 64,
-                                    )
-                                  : Image.network(
-                                      userInfo["avatarUrl"],
-                                      width: 64,
-                                      height: 64,
-                                    ),
-                            ),
+                    Container(
+                      height: 70,
+                      padding: EdgeInsets.only(left: 20),
+                      margin: EdgeInsets.all(20),
+                      alignment: Alignment.centerLeft,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey.shade300, blurRadius: 10)
+                          ],
+                          borderRadius: BorderRadius.circular(20)),
+                      child: ListTile(
+                        leading: CircleIcon(
+                          color: Color(0xffA279D7),
+                          icon: Icon(
+                            Icons.edit,
+                            color: Colors.white,
                           ),
-                          SizedBox(
-                            height: 20,
+                        ),
+                        onTap: () {
+                          showProfileModal();
+                        },
+                        title: Text("编辑资料"),
+                      ),
+                    ),
+                    Container(
+                      height: 70,
+                      padding: EdgeInsets.only(left: 20),
+                      margin: EdgeInsets.all(20),
+                      alignment: Alignment.centerLeft,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey.shade300, blurRadius: 10)
+                          ],
+                          borderRadius: BorderRadius.circular(20)),
+                      child: ListTile(
+                        leading: CircleIcon(
+                          color: Color(0xffA279D7),
+                          icon: Icon(
+                            Icons.person,
+                            color: Colors.white,
                           ),
-                          Text(
-                            userInfo["username"] == null
-                                ? ""
-                                : userInfo["username"],
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 36,
-                                color: Colors.black),
+                        ),
+                        onTap: () {
+                          showImgSelectModal(
+                              context, selectImgByCamera, selectImgByGallery);
+                        },
+                        title: Text("更改头像"),
+                      ),
+                    ),
+                    Container(
+                      height: 70,
+                      padding: EdgeInsets.only(left: 20),
+                      margin: EdgeInsets.all(20),
+                      alignment: Alignment.centerLeft,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey.shade300, blurRadius: 10)
+                          ],
+                          borderRadius: BorderRadius.circular(20)),
+                      child: ListTile(
+                        leading: CircleIcon(
+                          color: Color(0xffA279D7),
+                          icon: Icon(
+                            Icons.vpn_key,
+                            color: Colors.white,
                           ),
-                          Text("${userInfo["signature"]}"),
-                        ],
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ForgetPassWord()));
+                        },
+                        title: Text("修改密码"),
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
-          ),
-          Container(
-            height: 350,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Container(
-                    height: 70,
-                    padding: EdgeInsets.only(left: 20),
-                    margin: EdgeInsets.all(20),
-                    alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(color: Colors.grey.shade300, blurRadius: 10)
-                        ],
-                        borderRadius: BorderRadius.circular(20)),
-                    child: ListTile(
-                      leading: CircleIcon(
-                        color: Color(0xffA279D7),
-                        icon: Icon(
-                          Icons.edit,
-                          color: Colors.white,
-                        ),
-                      ),
-                      title: Text("编辑资料"),
-                    ),
-                  ),
-                  Container(
-                    height: 70,
-                    padding: EdgeInsets.only(left: 20),
-                    margin: EdgeInsets.all(20),
-                    alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(color: Colors.grey.shade300, blurRadius: 10)
-                        ],
-                        borderRadius: BorderRadius.circular(20)),
-                    child: ListTile(
-                      leading: CircleIcon(
-                        color: Color(0xffA279D7),
-                        icon: Icon(
-                          Icons.person,
-                          color: Colors.white,
-                        ),
-                      ),
-                      onTap: showImgSelectModal,
-                      title: Text("更改头像"),
-                    ),
-                  ),
-                  Container(
-                    height: 70,
-                    padding: EdgeInsets.only(left: 20),
-                    margin: EdgeInsets.all(20),
-                    alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(color: Colors.grey.shade300, blurRadius: 10)
-                        ],
-                        borderRadius: BorderRadius.circular(20)),
-                    child: ListTile(
-                      leading: CircleIcon(
-                        color: Color(0xffA279D7),
-                        icon: Icon(
-                          Icons.vpn_key,
-                          color: Colors.white,
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ForgetPassWord()));
-                      },
-                      title: Text("修改密码"),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-// 显示底部图片选择框
-  void showImgSelectModal() {
-    showCupertinoModalPopup(
-      context: context,
-      builder: (context) {
-        return Container(
-          width: double.infinity,
-          height: 180,
-          padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 10),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              )),
-          child: Column(
-            children: [
-              CupertinoButton(child: Text("相机"), onPressed: selectImgByCamera),
-              CupertinoButton(child: Text("图库"), onPressed: selectImgByGallery),
             ],
           ),
-        );
-      },
-    );
+        ));
   }
 
 // 从相机获取图片
   void selectImgByCamera() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.camera);
-    print(await image?.length());
+    if (image != null) {
+      EasyLoading.show();
+      var result = await dioUploadFile(image, userInfo);
+      EasyLoading.dismiss();
+      print(result);
+      if (result["status"] == "success") {
+        EasyLoading.showSuccess("上传成功");
+        await setUserInfo(result["data"]);
+        getUserInfo().then((value) => {
+              setState(() {
+                userInfo = value;
+                name.text = value["name"] ?? "";
+                signature.text = value["signature"] ?? "";
+              })
+            });
+      } else {
+        EasyLoading.showError(result["data"]);
+      }
+    }
   }
 
   // 从图库获取图片
   void selectImgByGallery() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      EasyLoading.show();
+      var result = await dioUploadFile(image, userInfo);
+      EasyLoading.dismiss();
+      print(result);
+      if (result["status"] == "success") {
+        EasyLoading.showSuccess("上传成功");
+        await setUserInfo(result["data"]);
+        getUserInfo().then((value) => {
+              setState(() {
+                userInfo = value;
+                name.text = value["name"] ?? "";
+                signature.text = value["signature"] ?? "";
+              })
+            });
+      } else {
+        EasyLoading.showError(result["data"]);
+      }
+    }
   }
 
   void showProfileModal() {
@@ -261,45 +281,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
             content: Form(
               key: _formKey,
               child: Container(
-                  height: 360,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        // 名称框
-                        TextFormField(
-                          controller: name,
-                          decoration: const InputDecoration(
-                            hintText: '请输入笔记本名称',
-                          ),
-                          validator: (String? value) {
-                            if (value == null || value.isEmpty) {
-                              return '请输入笔记本名称';
-                            }
-                            return null;
-                          },
-                        ),
-                        // 描述框
-                        TextFormField(
-                          controller: signature,
-                          decoration: const InputDecoration(
-                            hintText: '请输入描述',
-                          ),
-                          validator: (String? value) {
-                            if (value == null || value.isEmpty) {
-                              return '请输入描述';
-                            }
-                            return null;
-                          },
-                        ),
-                        // 选择封面
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 16.0),
-                          child: Text("选择封面:"),
-                        ),
-                      ],
+                height: 100,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    // 名称框
+                    TextFormField(
+                      controller: name,
+                      decoration: const InputDecoration(
+                        hintText: 'username',
+                      ),
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'username不能为空';
+                        }
+                        return null;
+                      },
                     ),
-                  )),
+                    // 描述框
+                    TextFormField(
+                      controller: signature,
+                      decoration: const InputDecoration(
+                        hintText: 'signature',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
             actions: [
               CupertinoButton(
@@ -311,19 +319,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     var result = await httpPost(
                         uri: baseUrl + '/api/changeuserinfo',
                         param: {
-                          "userid": "${userInfo["userid"]}",
+                          "userid": "${userInfo["id"]}",
                           "username": "${name.text}",
                           "signature": "${signature.text}"
                         });
 
                     if (result["status"] == "success") {
-                      EasyLoading.showSuccess(result["data"]);
-                      setUserInfo(result["data"]);
+                      EasyLoading.showSuccess("更改成功");
+                      await setUserInfo(result["data"]);
                       getUserInfo().then((value) => {
                             setState(() {
                               userInfo = value;
-                              name.text = value["name"]!;
-                              signature.text = value["signature"]!;
+                              name.text = value["name"] ?? "";
+                              signature.text = value["signature"] ?? "";
                             })
                           });
                       EasyLoading.dismiss();

@@ -35,22 +35,26 @@ class _StatisticScreenState extends State<StatisticScreen> {
   }
 
   getYearData() async {
-    var result = await httpPost(uri: baseUrl + "/api/getyeardata", param: {
-      "year": "$currentYear",
-      "month": currentYear != _time.year ? "12" : "${_time.month}"
-    });
-    var cirResult = await httpPost(
-        uri: baseUrl + "/api/getcircledata", param: {"year": "$currentYear"});
-    if (result['status'] == 'success' &&
-        cirResult["status"] == "success" &&
-        mounted) {
-      setState(() {
-        _data["income"] = result["data"]["income"];
-        _data["outcome"] = result["data"]["outcome"];
-        circleData = cirResult["data"];
+    try {
+      var result = await httpPost(uri: baseUrl + "/api/getyeardata", param: {
+        "year": "$currentYear",
+        "month": currentYear != _time.year ? "12" : "${_time.month}"
       });
-    } else {
-      EasyLoading.showError(result["data"]);
+      var cirResult = await httpPost(
+          uri: baseUrl + "/api/getcircledata", param: {"year": "$currentYear"});
+      if (result['status'] == 'success' &&
+          cirResult["status"] == "success" &&
+          mounted) {
+        setState(() {
+          _data["income"] = result["data"]["income"];
+          _data["outcome"] = result["data"]["outcome"];
+          circleData = cirResult["data"];
+        });
+      } else {
+        EasyLoading.showError(result["data"]);
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -90,7 +94,6 @@ class _StatisticScreenState extends State<StatisticScreen> {
                         setState(() {
                           currentYear = value as int;
                         });
-                        print(value);
                       },
                     ),
                   ],

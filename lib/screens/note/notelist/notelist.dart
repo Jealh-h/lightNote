@@ -35,7 +35,6 @@ class _NoteListState extends State<NoteList> {
       "userid": "${widget.notebookInfo["userid"]}",
       "bid": "${widget.notebookInfo["bid"]}",
     });
-    print(result);
     if (result["status"] == "success" && mounted) {
       setState(() {
         noteArr = result["data"];
@@ -178,7 +177,6 @@ class _NoteListState extends State<NoteList> {
                     "bid": "${noteArr[index]["bid"]}",
                     "noteid": "${noteArr[index]["noteid"]}",
                   });
-                  print(result);
                   EasyLoading.dismiss();
                   if (result["status"] == "success") {
                     setState(() {

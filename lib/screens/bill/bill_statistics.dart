@@ -40,6 +40,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
         "year": "$currentYear",
         "month": currentYear != _time.year ? "12" : "${_time.month}"
       });
+      print(result["data"]);
       var cirResult = await httpPost(
           uri: baseUrl + "/api/getcircledata", param: {"year": "$currentYear"});
       if (result['status'] == 'success' &&

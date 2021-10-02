@@ -279,7 +279,6 @@ class NoteScreenState extends State<NoteScreen> {
           "bid": "${e["bid"]}",
           "opr": e["opr"]
         });
-        print(result);
         if (result["status"] == "success") {
           EasyLoading.showSuccess(result["data"]);
           Navigator.pop(context);

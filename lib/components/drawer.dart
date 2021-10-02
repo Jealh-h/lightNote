@@ -94,10 +94,11 @@ class DrawerScreenState extends State<DrawerScreen> {
                   ),
                   TextButton(
                       onPressed: () async {
-                        var dio = Dio();
-                        var res = await dio.get(
-                            "https://120.77.134.169:443/v3/weather/weatherInfo?key=25d3dafaaf101d84a39d5670e2d74d2f&city=110101");
-                        print(res);
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AboutScreen()));
                       },
                       child: Text(
                         "意见反馈",

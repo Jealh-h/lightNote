@@ -108,6 +108,7 @@ class _WriteNoteState extends State<WriteNote> {
         });
   }
 
+// 加载网络图片
   Future<UI.Image> loadImage(var path) async {
     ImageStream stream;
     var size = MediaQuery.of(context).size;
@@ -128,6 +129,7 @@ class _WriteNoteState extends State<WriteNote> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       key: _scaffoldKey,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
@@ -421,14 +423,16 @@ class _WriteNoteState extends State<WriteNote> {
                             "opr": widget.opr,
                             "title": _title.text,
                           };
-                        } else {}
-                        param = {
-                          ...userInfo,
-                          ...widget.notebookInfo,
-                          ...widget.noteInfo!,
-                          "opr": widget.opr,
-                          "title": _title.text,
-                        };
+                        } else {
+                          param = {
+                            ...userInfo,
+                            ...widget.notebookInfo,
+                            ...widget.noteInfo!,
+                            "opr": widget.opr,
+                            "title": _title.text,
+                          };
+                        }
+
                         var result = await dioUploadFileByByte(
                             pageBytes as List<int>, {...param});
                         if (result["status"] == 'success') {
